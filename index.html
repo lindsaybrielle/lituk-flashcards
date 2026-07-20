@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Life in the UK Test — Flashcards</title>
+<style>
+  :root {
+    --navy: #0b1f3a;
+    --red: #c8102e;
+    --cream: #faf7f0;
+    --card-bg: #ffffff;
+    --ink: #1a1a1a;
+    --muted: #6b7280;
+    --green: #1a7f37;
+    --amber: #b45309;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+  header {
+    background: var(--navy);
+    color: white;
+    padding: 1.2rem 1rem 1rem;
+    text-align: center;
+  }
+  header h1 {
+    margin: 0 0 0.2rem;
+    font-size: 1.4rem;
+  }
+  header p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #cbd5e1;
+  }
+  .stripe {
+    height: 5px;
+    background: linear-gradient(90deg, var(--red) 33%, white 33%, white 66%, var(--navy) 66%);
+  }
+  main {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 1.2rem 1rem 3rem;
+  }
+  .controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  select, button {
+    font-size: 0.9rem;
+    padding: 0.5rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    background: white;
+    cursor: pointer;
+  }
+  button.primary {
+    background: var(--navy);
+    color: white;
+    border-color: var(--navy);
+  }
+  button.primary:hover { background: #14305a; }
+  .progress-bar-wrap {
+    background: #e5e7eb;
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+    margin: 0.6rem 0 1.2rem;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--red);
+    transition: width 0.2s ease;
+  }
+  .counter {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.85rem;
+    margin-bottom: 0.6rem;
+  }
+  .card-scene {
+    perspective: 1200px;
+    height: 280px;
+    margin-bottom: 1.2rem;
+  }
+  .card {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.45s cubic-bezier(.4,.2,.2,1);
+    cursor: pointer;
+  }
+  .card.flipped { transform: rotateY(180deg); }
+  .face {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: var(--card-bg);
+    border-top: 6px solid var(--navy);
+  }
+  .face.back {
+    transform: rotateY(180deg);
+    border-top: 6px solid var(--red);
+  }
+  .tag {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.9rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .face p {
+    font-size: 1.1rem;
+    line-height: 1.4;
+    margin: 0;
+  }
+  .face.back p { font-size: 1.05rem; }
+  .hint {
+    position: absolute;
+    bottom: 0.7rem;
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+  .nav-row {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-bottom: 1.4rem;
+    flex-wrap: wrap;
+  }
+  .rate-row {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+  }
+  .rate-row button {
+    flex: 1;
+    max-width: 160px;
+    font-weight: 600;
+  }
+  .btn-know { border-color: var(--green); color: var(--green); }
+  .btn-know:hover { background: #ecfdf3; }
+  .btn-learning { border-color: var(--amber); color: var(--amber); }
+  .btn-learning:hover { background: #fffbeb; }
+  footer {
+    text-align: center;
+    color: var(--muted);
+    font-size: 0.78rem;
+    padding: 1rem;
+    line-height: 1.5;
+  }
+  footer a { color: var(--navy); }
+  .done-banner {
+    text-align: center;
+    padding: 2rem 1rem;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+  }
+  .done-banner h2 { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🇬🇧 Life in the UK Test — Flashcards</h1>
+  <p>124 self-authored, handbook-grounded cards · not official test questions</p>
+</header>
+<div class="stripe"></div>
+
+<main>
+  <div class="controls">
+    <select id="chapterSelect"></select>
+    <button id="shuffleBtn">🔀 Shuffle</button>
+    <button id="resetProgressBtn">↺ Reset progress</button>
+  </div>
+
+  <div class="counter" id="counter"></div>
+  <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+  <div id="studyArea">
+    <div class="card-scene">
+      <div class="card" id="card">
+        <div class="face front">
+          <span class="tag" id="tagFront">Chapter</span>
+          <p id="qText"></p>
+          <span class="hint">Tap card to reveal answer</span>
+        </div>
+        <div class="face back">
+          <span class="tag" id="tagBack">Answer</span>
+          <p id="aText"></p>
+          <span class="hint">Tap to flip back</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rate-row">
+      <button class="btn-learning" id="stillLearningBtn">Still learning</button>
+      <button class="btn-know" id="knowItBtn">Know it ✓</button>
+    </div>
+
+    <div class="nav-row">
+      <button id="prevBtn">← Prev</button>
+      <button class="primary" id="flipBtn">Flip (space)</button>
+      <button id="nextBtn">Next →</button>
+    </div>
+  </div>
+
+  <div id="doneArea" style="display:none;" class="done-banner">
+    <h2>🎉 Deck complete</h2>
+    <p id="doneStats"></p>
+    <button class="primary" id="restartBtn">Study again</button>
+  </div>
+</main>
+
+<footer>
+  Built from the sole official source, <em>"Life in the United Kingdom: A Guide for New Residents" (3rd ed.)</em>,
+  plus GOV.UK's published test format (24 questions, 45 minutes, 75% pass mark).
+  These are self-authored practice cards, not leaked or official test questions — no such public bank exists.
+  Always cross-check against the current handbook edition and
+  <a href="https://www.gov.uk/life-in-the-uk-test" target="_blank" rel="noopener">GOV.UK</a> before your test.
+  <br>Progress is saved locally in your browser only.
+</footer>
+
+<script>
+const CARDS = [
+  // Chapter 1 — Values and Principles
+  {ch:"Ch.1 Values", q:"What are the fundamental values underpinning British society, according to the handbook?", a:"Democracy, the rule of law, individual liberty, and tolerance of different faiths and beliefs."},
+  {ch:"Ch.1 Values", q:"What is the \"rule of law\"?", a:"The principle that everyone — including the government — is subject to and accountable under the law."},
+  {ch:"Ch.1 Values", q:"Is it a legal requirement to vote in the UK?", a:"No — voting is a right, not a legal obligation."},
+  {ch:"Ch.1 Values", q:"What does \"individual liberty\" mean in the context of the handbook?", a:"Freedom of speech, religion, and the right to live your life as you choose, within the law."},
+  {ch:"Ch.1 Values", q:"Why does the handbook say tolerance of different faiths and beliefs matters in the UK?", a:"Because the UK is a multi-faith, multi-ethnic society, and mutual respect is expected of everyone living there."},
+  {ch:"Ch.1 Values", q:"What must you do as part of becoming a permanent resident/citizen relating to this test?", a:"Pass the Life in the UK test (unless exempt) as evidence of sufficient knowledge of British life and values."},
+  {ch:"Ch.1 Values", q:"Is discrimination based on race, gender, disability, or religion acceptable under British values?", a:"No — equality and non-discrimination are core expected values."},
+  {ch:"Ch.1 Values", q:"What responsibility does the handbook say new residents have?", a:"To obey the law, respect the rights of others, and contribute to their community."},
+  {ch:"Ch.1 Values", q:"Does British law protect freedom of speech absolutely, with no limits?", a:"No — freedom of speech exists but is limited by law (e.g., laws against inciting violence or hatred)."},
+  {ch:"Ch.1 Values", q:"What is expected regarding participation in community life?", a:"New residents are encouraged to participate in volunteering, local activities, and civic life."},
+
+  // Chapter 2 — What is the UK?
+  {ch:"Ch.2 The UK", q:"What are the four nations that make up the United Kingdom?", a:"England, Scotland, Wales, and Northern Ireland."},
+  {ch:"Ch.2 The UK", q:"What is the capital of Scotland?", a:"Edinburgh."},
+  {ch:"Ch.2 The UK", q:"What is the capital of Wales?", a:"Cardiff."},
+  {ch:"Ch.2 The UK", q:"What is the capital of Northern Ireland?", a:"Belfast."},
+  {ch:"Ch.2 The UK", q:"Is the Isle of Man part of the United Kingdom?", a:"No — it's a Crown Dependency, not part of the UK."},
+  {ch:"Ch.2 The UK", q:"What is the highest mountain in the United Kingdom, and where is it?", a:"Ben Nevis, in Scotland."},
+  {ch:"Ch.2 The UK", q:"What is the highest mountain in Wales?", a:"Snowdon (Yr Wyddfa)."},
+  {ch:"Ch.2 The UK", q:"What is the highest mountain in England?", a:"Scafell Pike."},
+  {ch:"Ch.2 The UK", q:"What is the longest river in the UK?", a:"The River Severn."},
+  {ch:"Ch.2 The UK", q:"Which lake is the largest in the United Kingdom by surface area, and where is it?", a:"Lough Neagh, in Northern Ireland."},
+  {ch:"Ch.2 The UK", q:"Which lake is the largest in Great Britain (excluding Northern Ireland)?", a:"Loch Lomond, in Scotland. (Loch Ness has the greatest volume of water — a common trick distinction.)"},
+  {ch:"Ch.2 The UK", q:"What is the patron saint of England, and on what date is his day celebrated?", a:"St George, 23 April."},
+  {ch:"Ch.2 The UK", q:"What is the patron saint of Scotland, and on what date?", a:"St Andrew, 30 November."},
+  {ch:"Ch.2 The UK", q:"What is the patron saint of Wales, and on what date?", a:"St David, 1 March."},
+  {ch:"Ch.2 The UK", q:"What is the patron saint of Ireland/Northern Ireland, and on what date?", a:"St Patrick, 17 March."},
+  {ch:"Ch.2 The UK", q:"What is the national flower of England?", a:"The rose."},
+  {ch:"Ch.2 The UK", q:"What is the national flower/emblem of Scotland?", a:"The thistle."},
+  {ch:"Ch.2 The UK", q:"What are the national emblems of Wales?", a:"The daffodil and the leek."},
+  {ch:"Ch.2 The UK", q:"What is the national emblem of Northern Ireland?", a:"The shamrock (also flax)."},
+  {ch:"Ch.2 The UK", q:"What does the Union Flag combine?", a:"The crosses of St George (England), St Andrew (Scotland), and St Patrick (Ireland). Wales isn't separately represented."},
+
+  // Chapter 3 — History
+  {ch:"Ch.3 History", q:"In what year did the Battle of Hastings take place, and who won?", a:"1066 — William the Conqueror (Normans) defeated King Harold."},
+  {ch:"Ch.3 History", q:"What administrative survey did William the Conqueror commission, and roughly when?", a:"The Domesday Book, completed in 1086 — a survey of land and property in England."},
+  {ch:"Ch.3 History", q:"What was signed in 1215, and why does it matter?", a:"Magna Carta — it limited the power of the king and established that everyone, including the monarch, is subject to the law."},
+  {ch:"Ch.3 History", q:"What was the Black Death, and roughly when did it strike Britain?", a:"A plague pandemic that killed a large portion of the population, arriving in 1348."},
+  {ch:"Ch.3 History", q:"Which royal house won the Wars of the Roses, and how?", a:"The House of Tudor — Henry Tudor (Henry VII) defeated Richard III at Bosworth Field in 1485."},
+  {ch:"Ch.3 History", q:"Why did Henry VIII break from the Roman Catholic Church?", a:"The Pope refused to annul his marriage to Catherine of Aragon; Henry established the Church of England with himself as head (Act of Supremacy, 1534)."},
+  {ch:"Ch.3 History", q:"What major naval event happened in 1588 and who was reigning?", a:"The defeat of the Spanish Armada, under Elizabeth I."},
+  {ch:"Ch.3 History", q:"What happened in 1603, uniting the crowns?", a:"James VI of Scotland became James I of England, uniting the two crowns (Union of the Crowns)."},
+  {ch:"Ch.3 History", q:"What was the Gunpowder Plot, and when?", a:"A failed 1605 attempt led by Guy Fawkes and others to blow up Parliament and kill James I."},
+  {ch:"Ch.3 History", q:"What triggered the English Civil War, and roughly when did it run?", a:"Conflict between King Charles I and Parliament over power and money, roughly 1642–1651."},
+  {ch:"Ch.3 History", q:"What happened to Charles I in 1649?", a:"He was executed after losing the Civil War."},
+  {ch:"Ch.3 History", q:"Who led the Commonwealth after the monarchy was abolished?", a:"Oliver Cromwell, as Lord Protector."},
+  {ch:"Ch.3 History", q:"What happened in 1660?", a:"The Restoration — the monarchy was restored under Charles II."},
+  {ch:"Ch.3 History", q:"What two disasters struck London in 1665 and 1666?", a:"The Great Plague (1665) and the Great Fire of London (1666)."},
+  {ch:"Ch.3 History", q:"What was the Glorious Revolution of 1688?", a:"William of Orange and Mary took the throne from James II, largely without bloodshed, reinforcing Parliament's power."},
+  {ch:"Ch.3 History", q:"What did the Bill of Rights (1689) establish?", a:"Limits on royal power and certain rights of Parliament and individuals."},
+  {ch:"Ch.3 History", q:"What happened with the Act of Union in 1707?", a:"England and Scotland united to form the Kingdom of Great Britain, with a single Parliament."},
+  {ch:"Ch.3 History", q:"What happened with the Act of Union in 1801?", a:"Great Britain and Ireland united to form the United Kingdom of Great Britain and Ireland."},
+  {ch:"Ch.3 History", q:"What was the Battle of Trafalgar (1805), and who commanded the British fleet?", a:"A naval victory over France and Spain, under Admiral Horatio Nelson (who died in the battle)."},
+  {ch:"Ch.3 History", q:"What was the Battle of Waterloo (1815), and who defeated Napoleon?", a:"The Duke of Wellington (with Prussian support) defeated Napoleon, ending his rule."},
+  {ch:"Ch.3 History", q:"Who invented/pioneered the steam engine improvements that powered the Industrial Revolution?", a:"James Watt."},
+  {ch:"Ch.3 History", q:"Name a major Victorian engineer associated with British infrastructure (railways/bridges/ships).", a:"Isambard Kingdom Brunel."},
+  {ch:"Ch.3 History", q:"When did Queen Victoria reign?", a:"1837–1901."},
+  {ch:"Ch.3 History", q:"When was the transatlantic slave trade abolished by Britain, and when was slavery itself abolished across most of the British Empire?", a:"The slave trade was abolished in 1807; slavery itself was abolished in most of the British Empire in 1833."},
+  {ch:"Ch.3 History", q:"When did the First World War take place?", a:"1914–1918."},
+  {ch:"Ch.3 History", q:"When did the Second World War take place?", a:"1939–1945."},
+  {ch:"Ch.3 History", q:"Who was British Prime Minister for most of the Second World War?", a:"Winston Churchill."},
+  {ch:"Ch.3 History", q:"What was D-Day, and when did it happen?", a:"The Allied invasion of Nazi-occupied France, 6 June 1944."},
+  {ch:"Ch.3 History", q:"When was the NHS (National Health Service) founded?", a:"1948."},
+  {ch:"Ch.3 History", q:"What ship is closely associated with post-war Commonwealth immigration to the UK in 1948?", a:"The Empire Windrush."},
+  {ch:"Ch.3 History", q:"When did the UK join the European Economic Community (precursor to the EU)?", a:"1973."},
+  {ch:"Ch.3 History", q:"When were the Scottish Parliament and Welsh Assembly (now Senedd) established?", a:"1999, following referendums."},
+  {ch:"Ch.3 History", q:"What agreement in 1998 was central to the Northern Ireland peace process?", a:"The Good Friday (Belfast) Agreement."},
+  {ch:"Ch.3 History", q:"When did the UK hold its referendum on leaving the EU, and when did it formally leave?", a:"The referendum was in 2016; the UK formally left the EU in 2020."},
+  {ch:"Ch.3 History", q:"Who was Britain's first female Prime Minister, and in what decade did she serve?", a:"Margaret Thatcher, serving from 1979 to 1990."},
+
+  // Chapter 4 — Modern British Society
+  {ch:"Ch.4 Modern UK", q:"Approximately what is the population of the United Kingdom?", a:"Around 67 million (approx. — check your handbook edition for the exact current figure)."},
+  {ch:"Ch.4 Modern UK", q:"How often is the UK census conducted?", a:"Every 10 years (most recent in 2021 for England, Wales, and Northern Ireland)."},
+  {ch:"Ch.4 Modern UK", q:"What is the largest religion in the UK according to recent census data?", a:"Christianity, though a large and growing share of the population reports no religion."},
+  {ch:"Ch.4 Modern UK", q:"Name two other languages, besides English, spoken natively in parts of the UK.", a:"Welsh and Scottish Gaelic (also Irish and Cornish)."},
+  {ch:"Ch.4 Modern UK", q:"What is the significance of Remembrance Day / Armistice Day, and when is it?", a:"11 November — commemorates those who died in war, marked with a two-minute silence and poppies."},
+  {ch:"Ch.4 Modern UK", q:"What is Christmas Day's status as a public holiday?", a:"It's a bank holiday, a major Christian and cultural festival in the UK."},
+  {ch:"Ch.4 Modern UK", q:"What is Eid al-Fitr?", a:"A major Muslim festival marking the end of Ramadan, observed by many in the UK."},
+  {ch:"Ch.4 Modern UK", q:"What is Diwali?", a:"The Hindu (and Sikh/Jain) festival of light, celebrated by communities across the UK."},
+  {ch:"Ch.4 Modern UK", q:"What organisation is the UK's public broadcaster, funded by the license fee?", a:"The BBC (British Broadcasting Corporation), founded in the 1920s."},
+  {ch:"Ch.4 Modern UK", q:"Name one sport that originated in Britain.", a:"Football, cricket, rugby, golf, and tennis all have strong British origins (football's modern rules codified in England in 1863)."},
+  {ch:"Ch.4 Modern UK", q:"What is the difference between \"England\" and \"Britain/UK\" in everyday usage the test expects you to know?", a:"England is one of four nations; \"Britain\" typically means Great Britain (England, Scotland, Wales); the \"UK\" also includes Northern Ireland."},
+  {ch:"Ch.4 Modern UK", q:"What are the \"Home Nations\" in a sporting context?", a:"England, Scotland, Wales, and Northern Ireland, often competing separately (e.g., football, rugby)."},
+  {ch:"Ch.4 Modern UK", q:"What's a well-known British newspaper tradition mentioned in the handbook?", a:"The UK has a mix of tabloid and broadsheet newspapers with a long history of a free press."},
+  {ch:"Ch.4 Modern UK", q:"What is the Chelsea Flower Show?", a:"A famous annual gardening show held in London."},
+  {ch:"Ch.4 Modern UK", q:"What is Wimbledon?", a:"The oldest tennis tournament in the world, held annually in London."},
+
+  // Chapter 5 — Government, Law, and Your Role
+  {ch:"Ch.5 Government", q:"What type of monarchy does the UK have?", a:"A constitutional monarchy — the monarch is head of state but has largely ceremonial power; government is run by elected officials."},
+  {ch:"Ch.5 Government", q:"Who is the current monarch and when did they accede?", a:"King Charles III, who became monarch in September 2022 following the death of Queen Elizabeth II."},
+  {ch:"Ch.5 Government", q:"What are the two chambers of the UK Parliament?", a:"The House of Commons and the House of Lords."},
+  {ch:"Ch.5 Government", q:"How many Members of Parliament (MPs) sit in the House of Commons?", a:"650."},
+  {ch:"Ch.5 Government", q:"Are members of the House of Lords elected?", a:"No — they are appointed (life peers), inherit their seat (a smaller number of hereditary peers), or sit as senior bishops."},
+  {ch:"Ch.5 Government", q:"How is the Prime Minister chosen?", a:"The leader of the political party that can command a majority in the House of Commons is invited by the monarch to form a government."},
+  {ch:"Ch.5 Government", q:"What is the maximum interval between general elections?", a:"5 years."},
+  {ch:"Ch.5 Government", q:"What is the minimum voting age in UK general elections?", a:"18."},
+  {ch:"Ch.5 Government", q:"What electoral system is used for UK general elections?", a:"First past the post."},
+  {ch:"Ch.5 Government", q:"What is a \"constituency\"?", a:"A geographic area represented by one MP in the House of Commons."},
+  {ch:"Ch.5 Government", q:"What are the devolved legislatures of the UK, besides the UK Parliament?", a:"The Scottish Parliament, the Senedd (Welsh Parliament), and the Northern Ireland Assembly."},
+  {ch:"Ch.5 Government", q:"What is the role of the Speaker in the House of Commons?", a:"To chair debates, maintain order, and remain politically neutral."},
+  {ch:"Ch.5 Government", q:"At what age can you serve on a jury in England and Wales?", a:"18 to 75."},
+  {ch:"Ch.5 Government", q:"Does Scotland have a separate legal system from England and Wales?", a:"Yes — Scotland has its own distinct legal system."},
+  {ch:"Ch.5 Government", q:"What is council tax used for?", a:"To fund local services provided by local government (e.g., rubbish collection, policing, schools)."},
+  {ch:"Ch.5 Government", q:"What is the role of a Member of Parliament (MP)?", a:"To represent their constituency's interests in the House of Commons and help create laws."},
+  {ch:"Ch.5 Government", q:"What body enforces the law day-to-day, and is it centralized nationally?", a:"The police — organized as separate regional/local forces across the UK, not one national force."},
+  {ch:"Ch.5 Government", q:"What is the purpose of the Human Rights Act 1998?", a:"It incorporates the European Convention on Human Rights into UK law, protecting citizens' fundamental rights."},
+  {ch:"Ch.5 Government", q:"How can a resident get involved in their local community, per the handbook's suggestions?", a:"Volunteering, joining a residents' association, standing for local council, or participating in local events."},
+  {ch:"Ch.5 Government", q:"What must most UK workers have to pay tax and National Insurance correctly?", a:"A National Insurance number."},
+
+  // Mock exam set
+  {ch:"Mock Exam", q:"What year was the Battle of Hastings?", a:"1066."},
+  {ch:"Mock Exam", q:"What is the capital of Northern Ireland?", a:"Belfast."},
+  {ch:"Mock Exam", q:"Who signed Magna Carta and in what year?", a:"King John, 1215."},
+  {ch:"Mock Exam", q:"What are the UK's four fundamental values?", a:"Democracy, rule of law, individual liberty, tolerance of different faiths/beliefs."},
+  {ch:"Mock Exam", q:"What is the highest mountain in the UK?", a:"Ben Nevis."},
+  {ch:"Mock Exam", q:"How many MPs sit in the House of Commons?", a:"650."},
+  {ch:"Mock Exam", q:"What year did the Great Fire of London occur?", a:"1666."},
+  {ch:"Mock Exam", q:"What is the patron saint of Wales and his day?", a:"St David, 1 March."},
+  {ch:"Mock Exam", q:"What year did WWII end?", a:"1945."},
+  {ch:"Mock Exam", q:"Who was Prime Minister through most of WWII?", a:"Winston Churchill."},
+  {ch:"Mock Exam", q:"What is the minimum voting age?", a:"18."},
+  {ch:"Mock Exam", q:"What year was the NHS founded?", a:"1948."},
+  {ch:"Mock Exam", q:"What are the two chambers of Parliament?", a:"House of Commons and House of Lords."},
+  {ch:"Mock Exam", q:"What year did the UK leave the EU?", a:"2020."},
+  {ch:"Mock Exam", q:"What is the largest lake in the United Kingdom?", a:"Lough Neagh."},
+  {ch:"Mock Exam", q:"What is the maximum time between general elections?", a:"5 years."},
+  {ch:"Mock Exam", q:"Who is the current monarch?", a:"King Charles III."},
+  {ch:"Mock Exam", q:"What happened in 1707?", a:"Act of Union between England and Scotland."},
+  {ch:"Mock Exam", q:"What ship symbolizes 1948 Commonwealth immigration?", a:"The Empire Windrush."},
+  {ch:"Mock Exam", q:"What electoral system is used in UK general elections?", a:"First past the post."},
+  {ch:"Mock Exam", q:"What age range can serve on an England/Wales jury?", a:"18–75."},
+  {ch:"Mock Exam", q:"What was the Gunpowder Plot year?", a:"1605."},
+  {ch:"Mock Exam", q:"Name the four nations of the UK.", a:"England, Scotland, Wales, Northern Ireland."},
+  {ch:"Mock Exam", q:"What is council tax used to fund?", a:"Local government services."},
+];
+
+CARDS.forEach((c, i) => c.id = i);
+
+const STORAGE_KEY = "lituk_flashcard_progress_v1";
+let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+let deck = [];
+let idx = 0;
+let flipped = false;
+
+const chapterSelect = document.getElementById("chapterSelect");
+const card = document.getElementById("card");
+const qText = document.getElementById("qText");
+const aText = document.getElementById("aText");
+const tagFront = document.getElementById("tagFront");
+const tagBack = document.getElementById("tagBack");
+const counter = document.getElementById("counter");
+const progressBar = document.getElementById("progressBar");
+const studyArea = document.getElementById("studyArea");
+const doneArea = document.getElementById("doneArea");
+const doneStats = document.getElementById("doneStats");
+
+function saveProgress() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
+}
+
+function buildChapterOptions() {
+  const chapters = ["All chapters", ...new Set(CARDS.map(c => c.ch))];
+  chapterSelect.innerHTML = chapters.map(ch => `<option value="${ch}">${ch}</option>`).join("");
+}
+
+function buildDeck() {
+  const chosen = chapterSelect.value;
+  deck = chosen === "All chapters" ? [...CARDS] : CARDS.filter(c => c.ch === chosen);
+  idx = 0;
+  flipped = false;
+  render();
+}
+
+function shuffle() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  idx = 0;
+  flipped = false;
+  render();
+}
+
+function render() {
+  if (deck.length === 0 || idx >= deck.length) {
+    studyArea.style.display = "none";
+    doneArea.style.display = "block";
+    const known = deck.filter(c => progress[c.id] === "know").length;
+    doneStats.textContent = `You marked ${known} of ${deck.length} cards in this deck as "known".`;
+    return;
+  }
+  studyArea.style.display = "block";
+  doneArea.style.display = "none";
+  const c = deck[idx];
+  qText.textContent = c.q;
+  aText.textContent = c.a;
+  tagFront.textContent = c.ch;
+  tagBack.textContent = c.ch;
+  card.classList.toggle("flipped", flipped);
+  counter.textContent = `Card ${idx + 1} of ${deck.length}`;
+  const knownCount = deck.filter(c => progress[c.id] === "know").length;
+  progressBar.style.width = `${(knownCount / deck.length) * 100}%`;
+}
+
+function flip() {
+  flipped = !flipped;
+  card.classList.toggle("flipped", flipped);
+}
+
+function next() {
+  idx++;
+  flipped = false;
+  render();
+}
+
+function prev() {
+  if (idx > 0) idx--;
+  flipped = false;
+  render();
+}
+
+function rate(status) {
+  const c = deck[idx];
+  progress[c.id] = status;
+  saveProgress();
+  next();
+}
+
+card.addEventListener("click", flip);
+document.getElementById("flipBtn").addEventListener("click", flip);
+document.getElementById("nextBtn").addEventListener("click", next);
+document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("knowItBtn").addEventListener("click", () => rate("know"));
+document.getElementById("stillLearningBtn").addEventListener("click", () => rate("learning"));
+document.getElementById("shuffleBtn").addEventListener("click", shuffle);
+document.getElementById("restartBtn").addEventListener("click", () => { idx = 0; flipped = false; render(); });
+document.getElementById("resetProgressBtn").addEventListener("click", () => {
+  if (confirm("Reset all saved progress?")) {
+    progress = {};
+    saveProgress();
+    render();
+  }
+});
+chapterSelect.addEventListener("change", buildDeck);
+
+document.addEventListener("keydown", (e) => {
+  if (studyArea.style.display === "none") return;
+  if (e.code === "Space") { e.preventDefault(); flip(); }
+  else if (e.code === "ArrowRight") next();
+  else if (e.code === "ArrowLeft") prev();
+});
+
+buildChapterOptions();
+buildDeck();
+</script>
+
+</body>
+</html>
