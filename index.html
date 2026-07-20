@@ -77,6 +77,91 @@
     color: var(--muted);
     margin: 0 0 1rem;
   }
+
+  /* Timed mock exam */
+  .exam-intro {
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    padding: 1.5rem;
+    text-align: center;
+  }
+  .exam-intro ul {
+    text-align: left;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 1rem auto;
+  }
+  .exam-history {
+    margin-top: 1.2rem;
+    font-size: 0.82rem;
+    text-align: left;
+  }
+  .exam-history table { width: 100%; border-collapse: collapse; }
+  .exam-history td, .exam-history th {
+    padding: 0.3rem 0.4rem;
+    border-bottom: 1px solid #e5e7eb;
+    text-align: left;
+  }
+  .exam-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.8rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .exam-timer {
+    font-family: "SF Mono", Menlo, monospace;
+    font-size: 1.3rem;
+    font-weight: 700;
+    background: var(--navy);
+    color: white;
+    padding: 0.35rem 0.8rem;
+    border-radius: 8px;
+  }
+  .exam-timer.low { background: var(--red); }
+  .exam-jumpgrid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 0.35rem;
+    margin-bottom: 1rem;
+  }
+  .exam-dot {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+    background: white;
+    font-size: 0.75rem;
+    cursor: pointer;
+    padding: 0;
+  }
+  .exam-dot.answered { background: #dbeafe; border-color: #93c5fd; }
+  .exam-dot.current { outline: 2px solid var(--navy); outline-offset: 1px; }
+  .exam-submit-row { text-align: center; margin: 1rem 0; }
+  .pass-banner, .fail-banner {
+    text-align: center;
+    padding: 1.4rem 1rem;
+    border-radius: 14px;
+    margin-bottom: 1.2rem;
+  }
+  .pass-banner { background: var(--green-bg); border: 1px solid #bbf7d0; color: var(--green); }
+  .fail-banner { background: #fef2f2; border: 1px solid #fecaca; color: var(--red); }
+  .pass-banner h2, .fail-banner h2 { margin: 0 0 0.2rem; }
+  .review-item {
+    background: white;
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    margin-bottom: 0.6rem;
+    border-left: 4px solid var(--green);
+    font-size: 0.88rem;
+    line-height: 1.4;
+  }
+  .review-item.wrong { border-left-color: var(--red); }
+  .review-item .rq { font-weight: 600; margin-bottom: 0.3rem; }
+  .review-item .ra-wrong { color: var(--red); }
+  .review-item .ra-correct { color: var(--green); }
   .controls {
     display: flex;
     gap: 0.5rem;
@@ -316,17 +401,20 @@
   <div class="mode-toggle">
     <button id="modeFlashBtn" class="active">📇 Flashcards</button>
     <button id="modeMcBtn">✅ Multiple Choice</button>
+    <button id="modeExamBtn">⏱ Mock Exam</button>
   </div>
   <p class="mode-hint" id="modeHint">New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway.</p>
 
-  <div class="controls">
+  <div class="controls" id="studyControls">
     <select id="chapterSelect"></select>
     <button id="shuffleBtn">🔀 Shuffle</button>
     <button id="resetProgressBtn">↺ Reset progress</button>
   </div>
 
-  <div class="counter" id="counter"></div>
-  <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  <div id="studyChrome">
+    <div class="counter" id="counter"></div>
+    <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  </div>
 
   <div id="studyArea">
     <div class="card-scene">
@@ -373,6 +461,44 @@
     <h2>🎉 Deck complete</h2>
     <p id="doneStats"></p>
     <button class="primary" id="restartBtn">Study again</button>
+  </div>
+
+  <div id="examArea" style="display:none;">
+    <div id="examIdle" class="exam-intro">
+      <h2>⏱ Timed Mock Exam</h2>
+      <ul>
+        <li><strong>24 questions</strong>, multiple choice — same as the real test.</li>
+        <li><strong>45 minutes</strong> on the clock, counting down.</li>
+        <li><strong>Pass mark: 18/24 (75%)</strong> — no negative marking, so answer everything.</li>
+        <li>No feedback until you submit — just like sitting the real thing.</li>
+        <li>Questions are randomly drawn fresh from the full 148-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
+      </ul>
+      <button class="primary" id="examStartBtn">Start 45-Minute Mock Exam</button>
+      <div class="exam-history" id="examHistory"></div>
+    </div>
+
+    <div id="examRunning" style="display:none;">
+      <div class="exam-topbar">
+        <span id="examProgressText">Question 1 of 24</span>
+        <span class="exam-timer" id="examTimer">45:00</span>
+      </div>
+      <div class="exam-jumpgrid" id="examJumpGrid"></div>
+      <div class="mc-question-box">
+        <span class="tag" id="examTag">Chapter</span>
+        <p id="examQText"></p>
+      </div>
+      <div class="mc-options" id="examOptions"></div>
+      <div class="nav-row">
+        <button id="examPrevBtn">← Prev</button>
+        <button id="examNextBtn">Next →</button>
+      </div>
+      <div class="exam-submit-row">
+        <button class="primary" id="examSubmitBtn">Submit Exam</button>
+        <div><button id="examExitBtn" style="margin-top:0.6rem; font-size:0.78rem; border:none; background:none; color:var(--muted); text-decoration:underline; cursor:pointer;">Exit without submitting</button></div>
+      </div>
+    </div>
+
+    <div id="examFinished" style="display:none;"></div>
   </div>
 
   <details class="tips">
@@ -601,9 +727,21 @@ let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 let deck = [];
 let idx = 0;
 let flipped = false;
-let mode = "flash"; // "flash" | "mc"
+let mode = "flash"; // "flash" | "mc" | "exam"
 let mcAnswered = false;
 let mcOptionsCache = {}; // deck index -> shuffled options array
+
+const EXAM_LENGTH = 24;
+const EXAM_MINUTES = 45;
+const EXAM_PASS_MARK = 18;
+const EXAM_HISTORY_KEY = "lituk_exam_history_v1";
+let examState = "idle"; // "idle" | "running" | "finished"
+let examQuestions = [];
+let examOptionsCache = [];
+let examAnswers = [];
+let examIndex = 0;
+let examEndTime = null;
+let examTimerInterval = null;
 
 const chapterSelect = document.getElementById("chapterSelect");
 const card = document.getElementById("card");
@@ -623,7 +761,26 @@ const mcOptionsEl = document.getElementById("mcOptions");
 const mcExplanation = document.getElementById("mcExplanation");
 const modeFlashBtn = document.getElementById("modeFlashBtn");
 const modeMcBtn = document.getElementById("modeMcBtn");
+const modeExamBtn = document.getElementById("modeExamBtn");
 const modeHint = document.getElementById("modeHint");
+const studyChrome = document.getElementById("studyChrome");
+const studyControls = document.getElementById("studyControls");
+const examArea = document.getElementById("examArea");
+const examIdle = document.getElementById("examIdle");
+const examRunning = document.getElementById("examRunning");
+const examFinished = document.getElementById("examFinished");
+const examStartBtn = document.getElementById("examStartBtn");
+const examHistoryEl = document.getElementById("examHistory");
+const examProgressText = document.getElementById("examProgressText");
+const examTimerEl = document.getElementById("examTimer");
+const examJumpGrid = document.getElementById("examJumpGrid");
+const examTag = document.getElementById("examTag");
+const examQText = document.getElementById("examQText");
+const examOptionsEl = document.getElementById("examOptions");
+const examPrevBtn = document.getElementById("examPrevBtn");
+const examNextBtn = document.getElementById("examNextBtn");
+const examSubmitBtn = document.getElementById("examSubmitBtn");
+const examExitBtn = document.getElementById("examExitBtn");
 
 function saveProgress() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
@@ -658,11 +815,186 @@ function setMode(newMode) {
   mode = newMode;
   modeFlashBtn.classList.toggle("active", mode === "flash");
   modeMcBtn.classList.toggle("active", mode === "mc");
-  modeHint.textContent = mode === "flash"
-    ? "New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway."
-    : "Pick the answer you think is correct. You'll see the full explanation immediately either way, so wrong guesses still teach you the fact.";
-  mcAnswered = false;
-  render();
+  modeExamBtn.classList.toggle("active", mode === "exam");
+
+  const hints = {
+    flash: "New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway.",
+    mc: "Pick the answer you think is correct. You'll see the full explanation immediately either way, so wrong guesses still teach you the fact.",
+    exam: "No feedback until the end — this mode mirrors the real 24-question, 45-minute test as closely as possible.",
+  };
+  modeHint.textContent = hints[mode];
+
+  studyChrome.style.display = mode === "exam" ? "none" : "block";
+  studyControls.style.display = mode === "exam" ? "none" : "flex";
+  examArea.style.display = mode === "exam" ? "block" : "none";
+
+  if (mode === "exam") {
+    studyArea.style.display = "none";
+    mcArea.style.display = "none";
+    doneArea.style.display = "none";
+    renderExam();
+  } else {
+    mcAnswered = false;
+    render();
+  }
+}
+
+// ---------- Timed mock exam ----------
+
+function loadExamHistory() {
+  return JSON.parse(localStorage.getItem(EXAM_HISTORY_KEY) || "[]");
+}
+
+function saveExamHistory(history) {
+  localStorage.setItem(EXAM_HISTORY_KEY, JSON.stringify(history.slice(-10)));
+}
+
+function renderExamHistory() {
+  const history = loadExamHistory();
+  if (history.length === 0) {
+    examHistoryEl.innerHTML = "";
+    return;
+  }
+  const rows = history.slice().reverse().map(h => {
+    const dt = new Date(h.date);
+    const dateStr = dt.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " " +
+      dt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
+    const verdict = h.passed ? "✅ Pass" : "❌ Fail";
+    return `<tr><td>${dateStr}</td><td>${h.score}/${EXAM_LENGTH}</td><td>${verdict}</td></tr>`;
+  }).join("");
+  examHistoryEl.innerHTML = `<strong>Your past attempts</strong><table><tr><th>Date</th><th>Score</th><th>Result</th></tr>${rows}</table>`;
+}
+
+function startExam() {
+  const shuffled = [...CARDS];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  examQuestions = shuffled.slice(0, EXAM_LENGTH);
+  examOptionsCache = examQuestions.map(q => buildOptionsFor(q));
+  examAnswers = new Array(EXAM_LENGTH).fill(null);
+  examIndex = 0;
+  examEndTime = Date.now() + EXAM_MINUTES * 60 * 1000;
+  examState = "running";
+  if (examTimerInterval) clearInterval(examTimerInterval);
+  examTimerInterval = setInterval(tickExamTimer, 1000);
+  renderExam();
+}
+
+function tickExamTimer() {
+  const remainingMs = examEndTime - Date.now();
+  if (remainingMs <= 0) {
+    submitExam(true);
+    return;
+  }
+  const totalSeconds = Math.floor(remainingMs / 1000);
+  const mm = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
+  const ss = String(totalSeconds % 60).padStart(2, "0");
+  examTimerEl.textContent = `${mm}:${ss}`;
+  examTimerEl.classList.toggle("low", totalSeconds <= 300);
+}
+
+function renderExam() {
+  examIdle.style.display = examState === "idle" ? "block" : "none";
+  examRunning.style.display = examState === "running" ? "block" : "none";
+  examFinished.style.display = examState === "finished" ? "block" : "none";
+
+  if (examState === "idle") {
+    renderExamHistory();
+  } else if (examState === "running") {
+    renderExamQuestion();
+  } else if (examState === "finished") {
+    renderExamResults();
+  }
+}
+
+function renderExamQuestion() {
+  const q = examQuestions[examIndex];
+  examProgressText.textContent = `Question ${examIndex + 1} of ${EXAM_LENGTH}`;
+  examTag.textContent = q.ch;
+  examQText.textContent = q.q;
+
+  examJumpGrid.innerHTML = "";
+  examQuestions.forEach((_, i) => {
+    const btn = document.createElement("button");
+    btn.className = "exam-dot" + (examAnswers[i] ? " answered" : "") + (i === examIndex ? " current" : "");
+    btn.textContent = i + 1;
+    btn.addEventListener("click", () => { examIndex = i; renderExamQuestion(); });
+    examJumpGrid.appendChild(btn);
+  });
+
+  examOptionsEl.innerHTML = "";
+  examOptionsCache[examIndex].forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "mc-option" + (examAnswers[examIndex] === opt ? " selected-exam" : "");
+    if (examAnswers[examIndex] === opt) {
+      btn.style.borderColor = "var(--navy)";
+      btn.style.background = "#eef2ff";
+    }
+    btn.textContent = opt;
+    btn.addEventListener("click", () => {
+      examAnswers[examIndex] = opt;
+      renderExamQuestion();
+    });
+    examOptionsEl.appendChild(btn);
+  });
+}
+
+function submitExam(auto) {
+  if (examTimerInterval) clearInterval(examTimerInterval);
+  const unanswered = examAnswers.filter(a => a === null).length;
+  if (!auto && unanswered > 0) {
+    const proceed = confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`);
+    if (!proceed) {
+      examTimerInterval = setInterval(tickExamTimer, 1000);
+      return;
+    }
+  }
+  const score = examQuestions.reduce((sum, q, i) => sum + (examAnswers[i] === q.a ? 1 : 0), 0);
+  const passed = score >= EXAM_PASS_MARK;
+  const history = loadExamHistory();
+  history.push({ date: new Date().toISOString(), score, passed, auto: !!auto });
+  saveExamHistory(history);
+  examState = "finished";
+  renderExam();
+}
+
+function renderExamResults() {
+  const score = examQuestions.reduce((sum, q, i) => sum + (examAnswers[i] === q.a ? 1 : 0), 0);
+  const passed = score >= EXAM_PASS_MARK;
+  const bannerClass = passed ? "pass-banner" : "fail-banner";
+  const bannerText = passed
+    ? `🎉 Pass — ${score}/${EXAM_LENGTH} correct (need ${EXAM_PASS_MARK})`
+    : `Not yet — ${score}/${EXAM_LENGTH} correct (need ${EXAM_PASS_MARK})`;
+
+  const reviewHtml = examQuestions.map((q, i) => {
+    const yourAnswer = examAnswers[i];
+    const correct = yourAnswer === q.a;
+    return `<div class="review-item ${correct ? "" : "wrong"}">
+      <div class="rq">${i + 1}. ${q.q}</div>
+      <div>Your answer: <span class="${correct ? "ra-correct" : "ra-wrong"}">${yourAnswer || "(no answer)"}</span></div>
+      ${correct ? "" : `<div>Correct answer: <span class="ra-correct">${q.a}</span></div>`}
+    </div>`;
+  }).join("");
+
+  examFinished.innerHTML = `
+    <div class="${bannerClass}"><h2>${bannerText}</h2><p>Pass mark on the real test is 18/24 (75%), no negative marking.</p></div>
+    <div class="nav-row"><button class="primary" id="examRestartBtn">Start Another Mock Exam</button></div>
+    <h3 style="margin:1.2rem 0 0.4rem;">Review your answers</h3>
+    ${reviewHtml}
+  `;
+  document.getElementById("examRestartBtn").addEventListener("click", () => {
+    examState = "idle";
+    renderExam();
+  });
+}
+
+function exitExamWithoutSubmitting() {
+  if (!confirm("Exit this exam without submitting? Your progress on this attempt won't be scored.")) return;
+  if (examTimerInterval) clearInterval(examTimerInterval);
+  examState = "idle";
+  renderExam();
 }
 
 function buildOptionsFor(c) {
@@ -794,6 +1126,12 @@ document.getElementById("resetProgressBtn").addEventListener("click", () => {
 chapterSelect.addEventListener("change", buildDeck);
 modeFlashBtn.addEventListener("click", () => setMode("flash"));
 modeMcBtn.addEventListener("click", () => setMode("mc"));
+modeExamBtn.addEventListener("click", () => setMode("exam"));
+examStartBtn.addEventListener("click", startExam);
+examPrevBtn.addEventListener("click", () => { if (examIndex > 0) { examIndex--; renderExamQuestion(); } });
+examNextBtn.addEventListener("click", () => { if (examIndex < EXAM_LENGTH - 1) { examIndex++; renderExamQuestion(); } });
+examSubmitBtn.addEventListener("click", () => submitExam(false));
+examExitBtn.addEventListener("click", exitExamWithoutSubmitting);
 
 document.addEventListener("keydown", (e) => {
   if (mode === "flash") {
@@ -801,10 +1139,13 @@ document.addEventListener("keydown", (e) => {
     if (e.code === "Space") { e.preventDefault(); flip(); }
     else if (e.code === "ArrowRight") next();
     else if (e.code === "ArrowLeft") prev();
-  } else {
+  } else if (mode === "mc") {
     if (mcArea.style.display === "none") return;
     if (e.code === "ArrowRight") next();
     else if (e.code === "ArrowLeft") prev();
+  } else if (mode === "exam" && examState === "running") {
+    if (e.code === "ArrowRight" && examIndex < EXAM_LENGTH - 1) { examIndex++; renderExamQuestion(); }
+    else if (e.code === "ArrowLeft" && examIndex > 0) { examIndex--; renderExamQuestion(); }
   }
 });
 
