@@ -13,7 +13,9 @@
     --ink: #1a1a1a;
     --muted: #6b7280;
     --green: #1a7f37;
+    --green-bg: #ecfdf3;
     --amber: #b45309;
+    --amber-bg: #fffbeb;
   }
   * { box-sizing: border-box; }
   body {
@@ -46,6 +48,34 @@
     max-width: 640px;
     margin: 0 auto;
     padding: 1.2rem 1rem 3rem;
+  }
+  .mode-toggle {
+    display: flex;
+    background: #e5e7eb;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 0.6rem;
+  }
+  .mode-toggle button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 0.6rem 0.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.88rem;
+    cursor: pointer;
+    color: var(--muted);
+  }
+  .mode-toggle button.active {
+    background: var(--navy);
+    color: white;
+  }
+  .mode-hint {
+    text-align: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+    margin: 0 0 1rem;
   }
   .controls {
     display: flex;
@@ -161,9 +191,101 @@
     font-weight: 600;
   }
   .btn-know { border-color: var(--green); color: var(--green); }
-  .btn-know:hover { background: #ecfdf3; }
+  .btn-know:hover { background: var(--green-bg); }
   .btn-learning { border-color: var(--amber); color: var(--amber); }
-  .btn-learning:hover { background: #fffbeb; }
+  .btn-learning:hover { background: var(--amber-bg); }
+
+  /* Multiple choice mode */
+  .mc-question-box {
+    position: relative;
+    background: var(--card-bg);
+    border-radius: 14px;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
+    border-top: 6px solid var(--navy);
+    padding: 2rem 1.5rem 1.4rem;
+    margin-bottom: 1rem;
+    min-height: 130px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+  .mc-question-box p {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.4;
+  }
+  .mc-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+  }
+  .mc-option {
+    text-align: left;
+    padding: 0.7rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid #d1d5db;
+    background: white;
+    font-size: 0.95rem;
+    line-height: 1.35;
+    cursor: pointer;
+  }
+  .mc-option:hover:not(:disabled) { border-color: var(--navy); }
+  .mc-option.correct {
+    border-color: var(--green);
+    background: var(--green-bg);
+    color: var(--green);
+    font-weight: 600;
+  }
+  .mc-option.incorrect {
+    border-color: var(--red);
+    background: #fef2f2;
+    color: var(--red);
+    font-weight: 600;
+  }
+  .mc-option:disabled { cursor: default; opacity: 0.85; }
+  .mc-explanation {
+    background: #f1f5f9;
+    border-radius: 10px;
+    padding: 0.9rem 1rem;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    margin-bottom: 1.2rem;
+  }
+  .mc-explanation strong { display: block; margin-bottom: 0.3rem; }
+
+  details.tips {
+    background: white;
+    border-radius: 12px;
+    padding: 0.8rem 1rem;
+    margin: 1.4rem 0;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  }
+  details.tips summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  details.tips h4 {
+    margin: 1rem 0 0.3rem;
+    font-size: 0.9rem;
+  }
+  details.tips p, details.tips li {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: #333;
+  }
+  details.tips ul { margin: 0.2rem 0; padding-left: 1.2rem; }
+  details.tips .callout {
+    background: var(--amber-bg);
+    border: 1px solid #fde68a;
+    border-radius: 8px;
+    padding: 0.6rem 0.8rem;
+    margin: 0.5rem 0;
+  }
+  details.tips a { color: var(--navy); }
+
   footer {
     text-align: center;
     color: var(--muted);
@@ -186,11 +308,17 @@
 
 <header>
   <h1>🇬🇧 Life in the UK Test — Flashcards</h1>
-  <p>124 self-authored, handbook-grounded cards · not official test questions</p>
+  <p id="cardCountLine">self-authored, handbook-grounded cards · not official test questions</p>
 </header>
 <div class="stripe"></div>
 
 <main>
+  <div class="mode-toggle">
+    <button id="modeFlashBtn" class="active">📇 Flashcards</button>
+    <button id="modeMcBtn">✅ Multiple Choice</button>
+  </div>
+  <p class="mode-hint" id="modeHint">New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway.</p>
+
   <div class="controls">
     <select id="chapterSelect"></select>
     <button id="shuffleBtn">🔀 Shuffle</button>
@@ -228,11 +356,59 @@
     </div>
   </div>
 
+  <div id="mcArea" style="display:none;">
+    <div class="mc-question-box">
+      <span class="tag" id="mcTag">Chapter</span>
+      <p id="mcQText"></p>
+    </div>
+    <div class="mc-options" id="mcOptions"></div>
+    <div class="mc-explanation" id="mcExplanation" style="display:none;"></div>
+    <div class="nav-row">
+      <button id="mcPrevBtn">← Prev</button>
+      <button class="primary" id="mcNextBtn">Next →</button>
+    </div>
+  </div>
+
   <div id="doneArea" style="display:none;" class="done-banner">
     <h2>🎉 Deck complete</h2>
     <p id="doneStats"></p>
     <button class="primary" id="restartBtn">Study again</button>
   </div>
+
+  <details class="tips">
+    <summary>💡 Tips &amp; resources from someone who just passed (first attempt)</summary>
+
+    <h4>What the appointment is actually like</h4>
+    <ul>
+      <li>Total time: ~25 minutes — but only ~6 of those minutes were the test itself. The other ~19 minutes were identity verification and security check-in.</li>
+      <li><strong>Go to the toilet before you check in.</strong> Once you're seated in the waiting/document-processing area, you will not be allowed to leave it, even before the test starts.</li>
+      <li>Pass/fail results (and the confirmation email you need for your ILR/citizenship application) arrive immediately after finishing.</li>
+    </ul>
+
+    <h4>What was actually asked (confirms this app's chapter coverage)</h4>
+    <p>Key dates around voting rights, historical figures and monarchs, where government bodies and devolved administrations sit, resident responsibilities, wars/reforms/social movements, UK geography, famous figures in arts/sport/science, civil vs. criminal law, national symbols, and how national security/government procedures work — all reflected in this deck's chapters, including the newer "Voting Rights," "Famous Britons," "Legal System," and "Devolved Govt" sections added below.</p>
+
+    <h4>How they studied (2–3 weeks)</h4>
+    <ul>
+      <li>Handwritten notes chapter-by-chapter from the handbook (helped as a visual learner).</li>
+      <li>Quizzed after every chapter; wrote down anything missed and folded it back into notes.</li>
+      <li>Full mock exams once most content was covered.</li>
+      <li>Read tricky facts (monarchs, dates) out loud, repeatedly, on a separate cheat sheet.</li>
+      <li>Did a large batch of practice tests in the final two days, then a full notes re-read the day before.</li>
+    </ul>
+    <div class="callout">
+      <strong>Booking advice:</strong> book as soon as you can reliably pass mock exams — this material is short-term memory for most people, so waiting longer risks forgetting more than it helps you learn.
+    </div>
+
+    <h4>Resources they used</h4>
+    <p style="font-size:0.78rem; color:#666;">Third-party links, shared as-is from one test-taker's experience — not vetted by this app, and not the official handbook. Note that a "free PDF" of the handbook is normally a paid TSO publication, so treat unofficial copies with that in mind.</p>
+    <ul>
+      <li><a href="https://britizen.uk/study-guide#pdf-version" target="_blank" rel="noopener">Free PDF study guide (britizen.uk)</a></li>
+      <li><a href="https://www.youtube.com/watch?v=pZcJGA_TCis" target="_blank" rel="noopener">YouTube summary video</a> for condensing tricky topics</li>
+      <li><a href="https://lifeintheuktestweb.co.uk" target="_blank" rel="noopener">lifeintheuktestweb.co.uk</a> — 17 free practice tests, reported as closest in feel to the real thing</li>
+      <li>The official £5 TSO practice app — lets you drill by chapter; one reviewer felt it was worth the one-off cost</li>
+    </ul>
+  </details>
 </main>
 
 <footer>
@@ -241,6 +417,7 @@
   These are self-authored practice cards, not leaked or official test questions — no such public bank exists.
   Always cross-check against the current handbook edition and
   <a href="https://www.gov.uk/life-in-the-uk-test" target="_blank" rel="noopener">GOV.UK</a> before your test.
+  The tips panel reflects one person's individual experience — exact timing and question mix can vary by test centre.
   <br>Progress is saved locally in your browser only.
 </footer>
 
@@ -356,6 +533,38 @@ const CARDS = [
   {ch:"Ch.5 Government", q:"How can a resident get involved in their local community, per the handbook's suggestions?", a:"Volunteering, joining a residents' association, standing for local council, or participating in local events."},
   {ch:"Ch.5 Government", q:"What must most UK workers have to pay tax and National Insurance correctly?", a:"A National Insurance number."},
 
+  // Voting Rights & Reform (added after a real test-taker's report flagged this as heavily tested)
+  {ch:"Voting Rights", q:"What did the Great Reform Act of 1832 do?", a:"Expanded the electorate and removed many \"rotten boroughs\" with tiny populations, though voting remained restricted to property-owning men."},
+  {ch:"Voting Rights", q:"What 19th-century movement campaigned for wider male suffrage and democratic reform through the \"People's Charter\"?", a:"The Chartist movement (1830s–1840s)."},
+  {ch:"Voting Rights", q:"What did the Representation of the People Act 1918 achieve?", a:"It gave the vote to all men over 21, and to women over 30 who met certain property qualifications."},
+  {ch:"Voting Rights", q:"Who led the suffragette movement (Women's Social and Political Union) campaigning for women's votes?", a:"Emmeline Pankhurst."},
+  {ch:"Voting Rights", q:"What did the Equal Franchise Act 1928 achieve?", a:"It gave women the vote on the same terms as men, at age 21."},
+  {ch:"Voting Rights", q:"When was the voting age lowered from 21 to 18?", a:"1969."},
+
+  // Famous Britons — arts, science, sport
+  {ch:"Famous Britons", q:"Who wrote Romeo and Juliet and Hamlet, and is considered Britain's greatest playwright?", a:"William Shakespeare."},
+  {ch:"Famous Britons", q:"Which novelist wrote Oliver Twist and A Christmas Carol, highlighting Victorian social conditions?", a:"Charles Dickens."},
+  {ch:"Famous Britons", q:"Which novelist wrote Pride and Prejudice?", a:"Jane Austen."},
+  {ch:"Famous Britons", q:"Who formulated the laws of motion and universal gravitation?", a:"Sir Isaac Newton."},
+  {ch:"Famous Britons", q:"Who proposed the theory of evolution by natural selection in On the Origin of Species?", a:"Charles Darwin."},
+  {ch:"Famous Britons", q:"Who discovered penicillin, and roughly when?", a:"Alexander Fleming, in 1928."},
+  {ch:"Famous Britons", q:"Who is credited with inventing the World Wide Web?", a:"Sir Tim Berners-Lee, a British computer scientist."},
+  {ch:"Famous Britons", q:"Which British physicist wrote \"A Brief History of Time\"?", a:"Stephen Hawking."},
+  {ch:"Famous Britons", q:"Which Liverpool band became one of the most influential groups in popular music history?", a:"The Beatles."},
+  {ch:"Famous Britons", q:"Where were the modern rules of football first codified, and in what year?", a:"In England, in 1863, with the formation of the Football Association."},
+
+  // Legal System
+  {ch:"Legal System", q:"What is the key difference between civil law and criminal law in the UK?", a:"Civil law resolves disputes between individuals or organisations; criminal law deals with offences against society, prosecuted by the state."},
+  {ch:"Legal System", q:"Which court handles the most serious criminal cases in England and Wales, using a jury?", a:"The Crown Court."},
+  {ch:"Legal System", q:"Which court handles minor criminal cases without a jury in England and Wales?", a:"The Magistrates' Court."},
+  {ch:"Legal System", q:"What is the highest court of appeal in the UK?", a:"The Supreme Court."},
+
+  // Devolved government locations
+  {ch:"Devolved Govt", q:"Where is the UK Parliament located?", a:"The Palace of Westminster, London."},
+  {ch:"Devolved Govt", q:"Where is the Scottish Parliament located?", a:"Holyrood, Edinburgh."},
+  {ch:"Devolved Govt", q:"Where is the Senedd (Welsh Parliament) located?", a:"Cardiff Bay."},
+  {ch:"Devolved Govt", q:"Where does the Northern Ireland Assembly sit?", a:"Stormont, Belfast."},
+
   // Mock exam set
   {ch:"Mock Exam", q:"What year was the Battle of Hastings?", a:"1066."},
   {ch:"Mock Exam", q:"What is the capital of Northern Ireland?", a:"Belfast."},
@@ -384,12 +593,17 @@ const CARDS = [
 ];
 
 CARDS.forEach((c, i) => c.id = i);
+document.getElementById("cardCountLine").textContent =
+  `${CARDS.length} self-authored, handbook-grounded cards · not official test questions`;
 
 const STORAGE_KEY = "lituk_flashcard_progress_v1";
 let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
 let deck = [];
 let idx = 0;
 let flipped = false;
+let mode = "flash"; // "flash" | "mc"
+let mcAnswered = false;
+let mcOptionsCache = {}; // deck index -> shuffled options array
 
 const chapterSelect = document.getElementById("chapterSelect");
 const card = document.getElementById("card");
@@ -400,8 +614,16 @@ const tagBack = document.getElementById("tagBack");
 const counter = document.getElementById("counter");
 const progressBar = document.getElementById("progressBar");
 const studyArea = document.getElementById("studyArea");
+const mcArea = document.getElementById("mcArea");
 const doneArea = document.getElementById("doneArea");
 const doneStats = document.getElementById("doneStats");
+const mcQText = document.getElementById("mcQText");
+const mcTag = document.getElementById("mcTag");
+const mcOptionsEl = document.getElementById("mcOptions");
+const mcExplanation = document.getElementById("mcExplanation");
+const modeFlashBtn = document.getElementById("modeFlashBtn");
+const modeMcBtn = document.getElementById("modeMcBtn");
+const modeHint = document.getElementById("modeHint");
 
 function saveProgress() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
@@ -417,6 +639,7 @@ function buildDeck() {
   deck = chosen === "All chapters" ? [...CARDS] : CARDS.filter(c => c.ch === chosen);
   idx = 0;
   flipped = false;
+  mcOptionsCache = {};
   render();
 }
 
@@ -427,26 +650,102 @@ function shuffle() {
   }
   idx = 0;
   flipped = false;
+  mcOptionsCache = {};
   render();
+}
+
+function setMode(newMode) {
+  mode = newMode;
+  modeFlashBtn.classList.toggle("active", mode === "flash");
+  modeMcBtn.classList.toggle("active", mode === "mc");
+  modeHint.textContent = mode === "flash"
+    ? "New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway."
+    : "Pick the answer you think is correct. You'll see the full explanation immediately either way, so wrong guesses still teach you the fact.";
+  mcAnswered = false;
+  render();
+}
+
+function buildOptionsFor(c) {
+  const samePool = CARDS.filter(o => o.ch === c.ch && o.id !== c.id);
+  const otherPool = CARDS.filter(o => o.ch !== c.ch && o.id !== c.id);
+  const distractors = [];
+  const pool = [...samePool];
+  while (distractors.length < 3 && pool.length > 0) {
+    const i = Math.floor(Math.random() * pool.length);
+    distractors.push(pool.splice(i, 1)[0].a);
+  }
+  while (distractors.length < 3 && otherPool.length > 0) {
+    const i = Math.floor(Math.random() * otherPool.length);
+    distractors.push(otherPool.splice(i, 1)[0].a);
+  }
+  const options = [c.a, ...distractors];
+  for (let i = options.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [options[i], options[j]] = [options[j], options[i]];
+  }
+  return options;
 }
 
 function render() {
   if (deck.length === 0 || idx >= deck.length) {
     studyArea.style.display = "none";
+    mcArea.style.display = "none";
     doneArea.style.display = "block";
     const known = deck.filter(c => progress[c.id] === "know").length;
     doneStats.textContent = `You marked ${known} of ${deck.length} cards in this deck as "known".`;
     return;
   }
-  studyArea.style.display = "block";
   doneArea.style.display = "none";
   const c = deck[idx];
-  qText.textContent = c.q;
-  aText.textContent = c.a;
-  tagFront.textContent = c.ch;
-  tagBack.textContent = c.ch;
-  card.classList.toggle("flipped", flipped);
   counter.textContent = `Card ${idx + 1} of ${deck.length}`;
+  const knownCount = deck.filter(c => progress[c.id] === "know").length;
+  progressBar.style.width = `${(knownCount / deck.length) * 100}%`;
+
+  if (mode === "flash") {
+    studyArea.style.display = "block";
+    mcArea.style.display = "none";
+    qText.textContent = c.q;
+    aText.textContent = c.a;
+    tagFront.textContent = c.ch;
+    tagBack.textContent = c.ch;
+    card.classList.toggle("flipped", flipped);
+  } else {
+    studyArea.style.display = "none";
+    mcArea.style.display = "block";
+    mcTag.textContent = c.ch;
+    mcQText.textContent = c.q;
+    if (!mcOptionsCache[idx]) mcOptionsCache[idx] = buildOptionsFor(c);
+    renderMcOptions(c);
+  }
+}
+
+function renderMcOptions(c) {
+  const options = mcOptionsCache[idx];
+  mcOptionsEl.innerHTML = "";
+  mcExplanation.style.display = "none";
+  mcAnswered = false;
+  options.forEach(opt => {
+    const btn = document.createElement("button");
+    btn.className = "mc-option";
+    btn.textContent = opt;
+    btn.addEventListener("click", () => selectMcOption(c, opt, btn));
+    mcOptionsEl.appendChild(btn);
+  });
+}
+
+function selectMcOption(c, chosen, btnEl) {
+  if (mcAnswered) return;
+  mcAnswered = true;
+  const isCorrect = chosen === c.a;
+  progress[c.id] = isCorrect ? "know" : "learning";
+  saveProgress();
+  [...mcOptionsEl.children].forEach(btn => {
+    btn.disabled = true;
+    if (btn.textContent === c.a) btn.classList.add("correct");
+    else if (btn === btnEl) btn.classList.add("incorrect");
+  });
+  mcExplanation.style.display = "block";
+  mcExplanation.innerHTML = `<strong>${isCorrect ? "✅ Correct" : "❌ Not quite — here's the fact"}</strong>${c.a}`;
   const knownCount = deck.filter(c => progress[c.id] === "know").length;
   progressBar.style.width = `${(knownCount / deck.length) * 100}%`;
 }
@@ -479,6 +778,8 @@ card.addEventListener("click", flip);
 document.getElementById("flipBtn").addEventListener("click", flip);
 document.getElementById("nextBtn").addEventListener("click", next);
 document.getElementById("prevBtn").addEventListener("click", prev);
+document.getElementById("mcNextBtn").addEventListener("click", next);
+document.getElementById("mcPrevBtn").addEventListener("click", prev);
 document.getElementById("knowItBtn").addEventListener("click", () => rate("know"));
 document.getElementById("stillLearningBtn").addEventListener("click", () => rate("learning"));
 document.getElementById("shuffleBtn").addEventListener("click", shuffle);
@@ -491,12 +792,20 @@ document.getElementById("resetProgressBtn").addEventListener("click", () => {
   }
 });
 chapterSelect.addEventListener("change", buildDeck);
+modeFlashBtn.addEventListener("click", () => setMode("flash"));
+modeMcBtn.addEventListener("click", () => setMode("mc"));
 
 document.addEventListener("keydown", (e) => {
-  if (studyArea.style.display === "none") return;
-  if (e.code === "Space") { e.preventDefault(); flip(); }
-  else if (e.code === "ArrowRight") next();
-  else if (e.code === "ArrowLeft") prev();
+  if (mode === "flash") {
+    if (studyArea.style.display === "none") return;
+    if (e.code === "Space") { e.preventDefault(); flip(); }
+    else if (e.code === "ArrowRight") next();
+    else if (e.code === "ArrowLeft") prev();
+  } else {
+    if (mcArea.style.display === "none") return;
+    if (e.code === "ArrowRight") next();
+    else if (e.code === "ArrowLeft") prev();
+  }
 });
 
 buildChapterOptions();
