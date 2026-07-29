@@ -45,9 +45,90 @@
     background: linear-gradient(90deg, var(--red) 33%, white 33%, white 66%, var(--navy) 66%);
   }
   main {
-    max-width: 640px;
+    max-width: 980px;
     margin: 0 auto;
     padding: 1.2rem 1rem 3rem;
+  }
+  .mode-toggle, .mode-hint, details.tips {
+    max-width: 640px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .study-grid {
+    display: flex;
+    gap: 1.5rem;
+    align-items: flex-start;
+  }
+  .study-main {
+    flex: 1 1 0;
+    min-width: 0;
+    max-width: 640px;
+  }
+  .analysis-panel {
+    flex: 0 0 300px;
+    background: white;
+    border-radius: 14px;
+    padding: 1.1rem 1.2rem;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 1rem;
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+  }
+  .analysis-panel h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1rem;
+    color: var(--navy);
+  }
+  .analysis-empty {
+    font-size: 0.85rem;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .analysis-summary {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0 0 0.9rem;
+    line-height: 1.4;
+  }
+  .analysis-row { margin-bottom: 0.8rem; }
+  .analysis-row-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    margin-bottom: 0.25rem;
+    gap: 0.5rem;
+  }
+  .analysis-row-top span:first-child { font-weight: 600; }
+  .analysis-bar-wrap {
+    background: #e5e7eb;
+    border-radius: 999px;
+    height: 6px;
+    overflow: hidden;
+    margin-bottom: 0.2rem;
+  }
+  .analysis-bar { height: 100%; border-radius: 999px; }
+  .analysis-verdict { font-size: 0.75rem; }
+  .analysis-bar.verdict-good { background: var(--green); }
+  .analysis-bar.verdict-mid { background: var(--amber); }
+  .analysis-bar.verdict-bad { background: var(--red); }
+  .analysis-verdict.verdict-good { color: var(--green); }
+  .analysis-verdict.verdict-mid { color: var(--amber); }
+  .analysis-verdict.verdict-bad { color: var(--red); }
+  .review-banner {
+    background: var(--amber-bg);
+    border: 1px solid #fde68a;
+    color: var(--amber);
+    border-radius: 10px;
+    padding: 0.6rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 0.8rem;
+  }
+  @media (max-width: 880px) {
+    .study-grid { flex-direction: column; }
+    .analysis-panel { flex: 1 1 auto; width: 100%; position: static; max-height: none; }
   }
   .mode-toggle {
     display: flex;
@@ -432,11 +513,16 @@
   </div>
   <p class="mode-hint" id="modeHint">New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway.</p>
 
+  <div class="study-grid">
+  <div class="study-main">
+
   <div class="controls" id="studyControls">
     <select id="chapterSelect"></select>
     <button id="shuffleBtn">🔀 Shuffle</button>
     <button id="resetProgressBtn">↺ Reset progress</button>
   </div>
+
+  <div id="reviewBanner" class="review-banner" style="display:none;"></div>
 
   <div id="studyChrome">
     <div class="counter" id="counter"></div>
@@ -527,6 +613,15 @@
     </div>
 
     <div id="examFinished" style="display:none;"></div>
+  </div>
+
+  </div>
+
+  <aside id="analysisPanel" class="analysis-panel">
+    <h3>📊 Study Analysis</h3>
+    <div id="analysisContent"></div>
+  </aside>
+
   </div>
 
   <details class="tips">
@@ -765,6 +860,11 @@ let mode = "flash"; // "flash" | "mc" | "exam"
 let mcAnswered = false;
 let mcOptionsCache = {}; // deck index -> shuffled options array
 
+let sessionScopeDeck = [];       // the full set of cards for the current chapter selection, fixed for the session
+let missedIds = new Set();       // every card id missed at least once this session (for the analysis panel)
+let currentPassMissed = new Set(); // ids missed during the pass currently in progress (drives the review loop)
+let inReviewPass = false;
+
 const EXAM_LENGTH = 24;
 const EXAM_MINUTES = 45;
 const EXAM_PASS_MARK = 18;
@@ -816,6 +916,8 @@ const examPrevBtn = document.getElementById("examPrevBtn");
 const examNextBtn = document.getElementById("examNextBtn");
 const examSubmitBtn = document.getElementById("examSubmitBtn");
 const examExitBtn = document.getElementById("examExitBtn");
+const reviewBanner = document.getElementById("reviewBanner");
+const analysisContent = document.getElementById("analysisContent");
 
 function saveProgress() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
@@ -841,9 +943,14 @@ function buildChapterOptions() {
 function buildDeck() {
   const chosen = chapterSelect.value;
   deck = chosen === "All chapters" ? [...CARDS] : CARDS.filter(c => c.ch === chosen);
+  sessionScopeDeck = [...deck];
+  missedIds = new Set();
+  currentPassMissed = new Set();
+  inReviewPass = false;
   idx = 0;
   flipped = false;
   mcOptionsCache = {};
+  renderAnalysisPanel();
   render();
 }
 
@@ -856,6 +963,44 @@ function shuffle() {
   flipped = false;
   mcOptionsCache = {};
   render();
+}
+
+function renderAnalysisPanel() {
+  if (sessionScopeDeck.length === 0) {
+    analysisContent.innerHTML = `<p class="analysis-empty">Study a chapter (or All chapters) in Flashcard or Multiple Choice mode — your weak-areas breakdown shows up here once you finish a round.</p>`;
+    return;
+  }
+  const chapters = [...new Set(sessionScopeDeck.map(c => c.ch))];
+  const rows = chapters.map(ch => {
+    const chCards = sessionScopeDeck.filter(c => c.ch === ch);
+    const total = chCards.length;
+    const missedInCh = chCards.filter(c => missedIds.has(c.id)).length;
+    const correct = total - missedInCh;
+    const pct = total > 0 ? Math.round((correct / total) * 100) : 100;
+    return { ch, correct, total, pct };
+  }).sort((a, b) => a.pct - b.pct);
+
+  const totalCards = sessionScopeDeck.length;
+  const totalMissed = sessionScopeDeck.filter(c => missedIds.has(c.id)).length;
+  const overallCorrect = totalCards - totalMissed;
+  const overallPct = totalCards > 0 ? Math.round((overallCorrect / totalCards) * 100) : 100;
+
+  const rowsHtml = rows.map(r => {
+    let verdict, cls;
+    if (r.pct >= 90) { verdict = "🟢 Solid"; cls = "verdict-good"; }
+    else if (r.pct >= 70) { verdict = "🟡 Getting there"; cls = "verdict-mid"; }
+    else { verdict = "🔴 Needs work"; cls = "verdict-bad"; }
+    return `<div class="analysis-row">
+      <div class="analysis-row-top"><span>${r.ch}</span><span>${r.correct}/${r.total} (${r.pct}%)</span></div>
+      <div class="analysis-bar-wrap"><div class="analysis-bar ${cls}" style="width:${r.pct}%"></div></div>
+      <div class="analysis-verdict ${cls}">${verdict}</div>
+    </div>`;
+  }).join("");
+
+  analysisContent.innerHTML = `
+    <p class="analysis-summary">${overallCorrect}/${totalCards} correct on first try this session (${overallPct}%).</p>
+    ${rowsHtml}
+  `;
 }
 
 function setMode(newMode) {
@@ -879,6 +1024,7 @@ function setMode(newMode) {
     studyArea.style.display = "none";
     mcArea.style.display = "none";
     doneArea.style.display = "none";
+    reviewBanner.style.display = "none";
     renderExam();
   } else {
     mcAnswered = false;
@@ -1075,12 +1221,16 @@ function buildOptionsFor(c) {
 }
 
 function render() {
+  reviewBanner.style.display = inReviewPass ? "block" : "none";
+  if (inReviewPass) {
+    reviewBanner.textContent = `🔁 Reviewing ${deck.length} card${deck.length === 1 ? "" : "s"} you missed — get through these to finish.`;
+  }
+
   if (deck.length === 0 || idx >= deck.length) {
     studyArea.style.display = "none";
     mcArea.style.display = "none";
     doneArea.style.display = "block";
-    const known = deck.filter(c => progress[c.id] === "know").length;
-    doneStats.textContent = `You marked ${known} of ${deck.length} cards in this deck as "known".`;
+    doneStats.textContent = `You've been through every card in this round without missing it. Check your Study Analysis for a breakdown by chapter.`;
     return;
   }
   doneArea.style.display = "none";
@@ -1133,6 +1283,12 @@ function selectMcOption(c, chosen, btnEl) {
   const isCorrect = chosen === c.a;
   progress[c.id] = isCorrect ? "know" : "learning";
   saveProgress();
+  if (isCorrect) {
+    currentPassMissed.delete(c.id);
+  } else {
+    currentPassMissed.add(c.id);
+    missedIds.add(c.id);
+  }
   [...mcOptionsEl.children].forEach(btn => {
     btn.disabled = true;
     if (btn.textContent === c.a) btn.classList.add("correct");
@@ -1153,6 +1309,24 @@ function flip() {
 function next() {
   idx++;
   flipped = false;
+  if (idx >= deck.length) {
+    if (currentPassMissed.size > 0) {
+      const reviewIds = [...currentPassMissed];
+      const reviewDeck = reviewIds.map(id => CARDS.find(c => c.id === id));
+      for (let i = reviewDeck.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [reviewDeck[i], reviewDeck[j]] = [reviewDeck[j], reviewDeck[i]];
+      }
+      deck = reviewDeck;
+      currentPassMissed = new Set();
+      idx = 0;
+      inReviewPass = true;
+      mcOptionsCache = {};
+    } else {
+      inReviewPass = false;
+    }
+    renderAnalysisPanel();
+  }
   render();
 }
 
@@ -1166,6 +1340,12 @@ function rate(status) {
   const c = deck[idx];
   progress[c.id] = status;
   saveProgress();
+  if (status === "learning") {
+    currentPassMissed.add(c.id);
+    missedIds.add(c.id);
+  } else {
+    currentPassMissed.delete(c.id);
+  }
   next();
 }
 
@@ -1178,7 +1358,17 @@ document.getElementById("mcPrevBtn").addEventListener("click", prev);
 document.getElementById("knowItBtn").addEventListener("click", () => rate("know"));
 document.getElementById("stillLearningBtn").addEventListener("click", () => rate("learning"));
 document.getElementById("shuffleBtn").addEventListener("click", shuffle);
-document.getElementById("restartBtn").addEventListener("click", () => { idx = 0; flipped = false; render(); });
+document.getElementById("restartBtn").addEventListener("click", () => {
+  deck = [...sessionScopeDeck];
+  missedIds = new Set();
+  currentPassMissed = new Set();
+  inReviewPass = false;
+  idx = 0;
+  flipped = false;
+  mcOptionsCache = {};
+  renderAnalysisPanel();
+  render();
+});
 document.getElementById("resetProgressBtn").addEventListener("click", () => {
   if (confirm("Reset all saved progress?")) {
     progress = {};
