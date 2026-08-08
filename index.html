@@ -585,7 +585,7 @@
         <li><strong>45 minutes</strong> on the clock, counting down.</li>
         <li><strong>Pass mark: 18/24 (75%)</strong> — no negative marking, so answer everything.</li>
         <li>No feedback until you submit — just like sitting the real thing.</li>
-        <li>Questions are randomly drawn fresh from the full 148-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
+        <li>Questions are randomly drawn fresh from the full 152-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
       </ul>
       <button class="primary" id="examStartBtn">Start 45-Minute Mock Exam</button>
       <div class="exam-history" id="examHistory"></div>
@@ -641,7 +641,7 @@
     </ul>
 
     <h4>What was actually asked (confirms this app's chapter coverage)</h4>
-    <p>Key dates around voting rights, historical figures and monarchs, where government bodies and devolved administrations sit, resident responsibilities, wars/reforms/social movements, UK geography, famous figures in arts/sport/science, civil vs. criminal law, national symbols, and how national security/government procedures work — all reflected in this deck's chapters, including the newer "Voting Rights," "Famous Britons," "Legal System," and "Devolved Govt" sections added below.</p>
+    <p>Key dates around voting rights, historical figures and monarchs, where government bodies and devolved administrations sit, resident responsibilities, wars/reforms/social movements, UK geography, famous figures in arts/sport/science, civil vs. criminal law, national symbols, and how national security/government procedures work — all reflected in this deck's chapters, including the newer "Voting Rights," "Famous Britons," "Legal System," "Devolved Govt," and "Places of Interest" sections added below.</p>
 
     <h4>How they studied (2–3 weeks)</h4>
     <ul>
@@ -713,6 +713,7 @@ const CARDS = [
   {ch:"Ch.2 The UK", q:"What does the Union Flag combine?", a:"The crosses of St George (England), St Andrew (Scotland), and St Patrick (Ireland). Wales isn't separately represented.", m:"Patron saint days in calendar order: David (1 Mar) → Patrick (17 Mar) → George (23 Apr) → Andrew (30 Nov) — spring opens the year of saints, autumn closes it.", d:["The crosses of St George, St David, and St Andrew, representing England, Wales, and Scotland.","The crosses of St George, St Andrew, St Patrick, and St David, representing all four nations equally.","The cross of St George alone, with the other nations represented by separate regional flags."]},
 
   // Chapter 3 — History
+  {ch:"Ch.3 History", q:"What is Boudicca remembered for?", a:"Leading the Iceni tribe in a rebellion against the Roman invaders of Britain; she's still remembered today, with a statue of her on Westminster Bridge in London.", m:"Boudicca = bold attacker — she fought back against Rome.", d:["Beautiful paintings of the British landscape.","Lavish burial proceedings.","Agricultural innovations."]},
   {ch:"Ch.3 History", q:"In what year did the Battle of Hastings take place, and who won?", a:"1066 — William the Conqueror (Normans) defeated King Harold.", m:"\"Ten sixty-six, Norman tricks\" — William's forces win, famously said to have felled Harold with an arrow.", d:["1485 — Henry Tudor defeated Richard III at Bosworth Field.","1215 — King John was forced to sign Magna Carta.","1815 — the Duke of Wellington defeated Napoleon at Waterloo."]},
   {ch:"Ch.3 History", q:"What administrative survey did William the Conqueror commission, and roughly when?", a:"The Domesday Book, completed in 1086 — a survey of land and property in England.", m:"\"Domesday\" sounds like \"doomsday\" — a judgment-day style record of everyone's land and property.", d:["The Bill of Rights, passed in 1689 — a survey of Parliament's powers.","Magna Carta, signed in 1215 — a survey of the king's legal limits.","The Act of Union, passed in 1707 — a survey of Scotland's territory."]},
   {ch:"Ch.3 History", q:"What was signed in 1215, and why does it matter?", a:"Magna Carta — it limited the power of the king and established that everyone, including the monarch, is subject to the law.", m:"\"Twelve-fifteen, the law's first scene\" — even the king had to sign up to the rules.", d:["The Bill of Rights — it gave Parliament the sole right to declare war.","The Act of Supremacy — it made the king head of the Church of England.","The Petition of Right — it abolished the monarchy entirely."]},
@@ -737,6 +738,7 @@ const CARDS = [
   {ch:"Ch.3 History", q:"Name a major Victorian engineer associated with British infrastructure (railways/bridges/ships).", a:"Isambard Kingdom Brunel.", d:["James Watt.","George Stephenson.","Thomas Telford."]},
   {ch:"Ch.3 History", q:"When did Queen Victoria reign?", a:"1837–1901.", m:"Victoria's reign runs nearly the whole 19th century — \"'37 to '01\" — the longest of any monarch until Elizabeth II beat it.", d:["1901–1910.","1760–1820.","1952–2022."]},
   {ch:"Ch.3 History", q:"When was the transatlantic slave trade abolished by Britain, and when was slavery itself abolished across most of the British Empire?", a:"The slave trade was abolished in 1807; slavery itself was abolished in most of the British Empire in 1833.", m:"\"Oh-seven, stop the trade; thirty-three, freedom's made\" — trading banned first, slavery itself abolished 26 years later.", d:["The slave trade was abolished in 1833; slavery itself was abolished in 1807.","Both the slave trade and slavery were abolished together in 1833.","The slave trade was abolished in 1772; slavery itself was abolished in 1807."]},
+  {ch:"Ch.3 History", q:"Which of these individuals advocated for Ireland to remain in the UK but have its own parliament?", a:"Charles Stuart Parnell, who campaigned for Irish 'Home Rule' in the late 19th century — Ireland staying in the UK but with its own parliament.", m:"Parnell wanted a parliament of Ireland's own, but not full independence — that's 'Home Rule,' not 'Free Rule.'", d:["Isambard Kingdom Brunel.","William Wilberforce.","Emmeline Pankhurst."]},
   {ch:"Ch.3 History", q:"When did the First World War take place?", a:"1914–1918.", m:"WWI: '14 to '18, four years. WWII (below): '39 to '45, six years — WWII lasted longer.", d:["1939–1945.","1912–1916.","1916–1920."]},
   {ch:"Ch.3 History", q:"When did the Second World War take place?", a:"1939–1945.", m:"WWII: '39 to '45 — six years, ending with victory in Europe and Japan.", d:["1914–1918.","1936–1942.","1941–1946."]},
   {ch:"Ch.3 History", q:"Who was British Prime Minister for most of the Second World War?", a:"Winston Churchill.", d:["Clement Attlee.","Neville Chamberlain.","Margaret Thatcher."]},
@@ -819,6 +821,10 @@ const CARDS = [
   {ch:"Devolved Govt", q:"Where is the Scottish Parliament located?", a:"Holyrood, Edinburgh.", d:["The Palace of Westminster, London.","Cardiff Bay.","Stormont, Belfast."]},
   {ch:"Devolved Govt", q:"Where is the Senedd (Welsh Parliament) located?", a:"Cardiff Bay.", d:["Holyrood, Edinburgh.","Stormont, Belfast.","The Palace of Westminster, London."]},
   {ch:"Devolved Govt", q:"Where does the Northern Ireland Assembly sit?", a:"Stormont, Belfast.", d:["Holyrood, Edinburgh.","Cardiff Bay.","The Palace of Westminster, London."]},
+  {ch:"Devolved Govt", q:"Since what year has there been a Northern Ireland Assembly?", a:"1999 — established soon after the Good Friday Agreement (1998), the same year as the Scottish Parliament and Welsh Assembly, though it has been suspended on a few occasions.", m:"Scotland, Wales, and Northern Ireland all got their own parliament/assembly the same year — 1999.", d:["2002.","1998.","2007."]},
+
+  // Places of Interest
+  {ch:"Places of Interest", q:"What is the biggest stretch of water in the Lake District?", a:"Windermere. (In 2007, TV viewers voted nearby Wastwater Britain's favourite view — a common mix-up with the biggest-lake question.)", m:"Wind-ermere is the biggest — don't get blown off course by Wastwater, which is just the favourite view.", d:["Ullswater.","Derwentwater.","Coniston Water."]},
 
   // Mock exam set
   {ch:"Mock Exam", q:"What year was the Battle of Hastings?", a:"1066.", d:["1215.","1485.","1815."]},
