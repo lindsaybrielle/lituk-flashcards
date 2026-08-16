@@ -585,7 +585,7 @@
         <li><strong>45 minutes</strong> on the clock, counting down.</li>
         <li><strong>Pass mark: 18/24 (75%)</strong> — no negative marking, so answer everything.</li>
         <li>No feedback until you submit — just like sitting the real thing.</li>
-        <li>Questions are randomly drawn fresh from the full 183-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
+        <li>Questions are randomly drawn fresh from the full 189-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
       </ul>
       <button class="primary" id="examStartBtn">Start 45-Minute Mock Exam</button>
       <div class="exam-history" id="examHistory"></div>
@@ -714,6 +714,8 @@ const CARDS = [
   {ch:"Ch.2 The UK", q:"What does the Union Flag combine?", a:"The crosses of St George (England), St Andrew (Scotland), and St Patrick (Ireland). Wales isn't separately represented.", m:"Patron saint days in calendar order: David (1 Mar) → Patrick (17 Mar) → George (23 Apr) → Andrew (30 Nov) — spring opens the year of saints, autumn closes it.", d:["The crosses of St George, St David, and St Andrew, representing England, Wales, and Scotland.","The crosses of St George, St Andrew, St Patrick, and St David, representing all four nations equally.","The cross of St George alone, with the other nations represented by separate regional flags."]},
 
   // Chapter 3 — History
+  {ch:"Ch.3 History", q:"Which prehistoric monument still stands in the English county of Wiltshire?", a:"Stonehenge, built during the Stone Age.", d:["Sutton Hoo.","Hadrian's Wall.","Skara Brae."]},
+  {ch:"Ch.3 History", q:"What is Skara Brae, and where is it?", a:"A Stone Age settlement and the best-preserved prehistoric village in northern Europe, on Orkney off the north coast of Scotland.", d:["A Roman fort on Hadrian's Wall.","An Anglo-Saxon ship burial in Suffolk.","A medieval abbey in Yorkshire."]},
   {ch:"Ch.3 History", q:"What connected Britain to the continent for much of the Stone Age?", a:"A land bridge — people came and went, following the herds of deer and horses they hunted.", d:["A continental glacier.","An overhead pass.","An underground tunnel."]},
   {ch:"Ch.3 History", q:"What is Boudicca remembered for?", a:"Leading the Iceni tribe in a rebellion against the Roman invaders of Britain; she's still remembered today, with a statue of her on Westminster Bridge in London.", m:"Boudicca = bold attacker — she fought back against Rome.", d:["Beautiful paintings of the British landscape.","Lavish burial proceedings.","Agricultural innovations."]},
   {ch:"Ch.3 History", q:"Whom did the Anglo-Saxon kingdoms in England unite under to defeat the Vikings?", a:"King Alfred the Great.", d:["Richard the Lionheart.","Edward the Elder.","William the Conqueror."]},
@@ -789,6 +791,7 @@ const CARDS = [
   {ch:"Ch.4 Modern UK", q:"What are the two types of rugby played in the UK, each with separate leagues and national teams?", a:"Rugby union and rugby league.", d:["English and Scottish.","Touch and flag.","Individual and club."]},
   {ch:"Ch.4 Modern UK", q:"What is the highest denomination banknote in general circulation in the UK?", a:"£50 (the denominations are £5, £10, £20, and £50).", d:["£20.","£100.","£500."]},
   {ch:"Ch.4 Modern UK", q:"Mo Farah is famous for being which of the following?", a:"A distance runner — he won gold in the 5,000m and 10,000m at the 2012 Olympics, the first Briton to win Olympic gold in the 10,000m.", d:["Fashion model.","Comedy actor.","Modern poet."]},
+  {ch:"Ch.4 Modern UK", q:"Who was Sir Francis Chichester?", a:"A British sailor — the first person to sail single-handed around the world, in 1966/67.", d:["The inventor of the 2-way radio.","The creator of the Chichester sauce.","The longest-serving sports broadcaster at Wembley Stadium."]},
   {ch:"Ch.4 Modern UK", q:"What film genre are 'Passport to Pimlico', 'The Ladykillers', and the 'Carry On' films part of?", a:"Comedy — the 1950s and 1960s were a high point for British comedy films.", d:["Action.","Documentary.","Drama."]},
 
   // Chapter 5 — Government, Law, and Your Role
@@ -804,6 +807,7 @@ const CARDS = [
   {ch:"Ch.5 Government", q:"What is a \"constituency\"?", a:"A geographic area represented by one MP in the House of Commons.", d:["A region represented by all MPs from a given political party.","A ceremonial county with no political representation.","A group of local councils that share a single MP."]},
   {ch:"Ch.5 Government", q:"What are the devolved legislatures of the UK, besides the UK Parliament?", a:"The Scottish Parliament, the Senedd (Welsh Parliament), and the Northern Ireland Assembly.", m:"Edinburgh's Holyrood, Cardiff Bay's Senedd, Belfast's Stormont, London's Westminster — each nation gets its own house.", d:["The Scottish Parliament and the Welsh Assembly only — Northern Ireland has no devolved body.","Regional English assemblies, the Senedd, and the Northern Ireland Assembly.","The Scottish Parliament, the Senedd, and the Greater London Assembly."]},
   {ch:"Ch.5 Government", q:"What is the role of the Speaker in the House of Commons?", a:"To chair debates, maintain order, and remain politically neutral.", d:["To lead the governing party and set its legislative agenda.","To represent the UK abroad on diplomatic matters.","To cast the deciding vote in every parliamentary debate."]},
+  {ch:"Ch.5 Government", q:"Who represents Parliament on ceremonial occasions?", a:"The Speaker.", d:["The Monarch.","The Prime Minister.","The Lord Speaker."]},
   {ch:"Ch.5 Government", q:"At what age can you serve on a jury in England and Wales?", a:"18 to 75.", m:"Same start line as voting — 18 — and retire from jury duty at 75.", d:["16 to 70.","21 to 65.","18 to 70."]},
   {ch:"Ch.5 Government", q:"Does Scotland have a separate legal system from England and Wales?", a:"Yes — Scotland has its own distinct legal system.", d:["No — Scotland uses exactly the same courts and laws as England and Wales.","Yes, but only for criminal cases, not civil cases.","No — only Northern Ireland has a separate legal system."]},
   {ch:"Ch.5 Government", q:"What is council tax used for?", a:"To fund local services provided by local government (e.g., rubbish collection, policing, schools).", d:["To fund the National Health Service directly.","To fund the UK's national defence budget.","To fund the state pension system."]},
@@ -828,6 +832,8 @@ const CARDS = [
   {ch:"Famous Britons", q:"Which novelist wrote Oliver Twist and A Christmas Carol, highlighting Victorian social conditions?", a:"Charles Dickens.", d:["William Shakespeare.","Jane Austen.","Thomas Hardy."]},
   {ch:"Famous Britons", q:"Which novelist wrote Pride and Prejudice?", a:"Jane Austen.", d:["Charlotte Brontë.","Charles Dickens.","Virginia Woolf."]},
   {ch:"Famous Britons", q:"Who formulated the laws of motion and universal gravitation?", a:"Sir Isaac Newton.", m:"Newton + falling apple = gravity — \"what goes up, must come down (and so did the apple).\"", d:["Charles Darwin.","Michael Faraday.","Stephen Hawking."]},
+  {ch:"Famous Britons", q:"Where was Sir Isaac Newton born?", a:"Lincolnshire, eastern England.", d:["Cambridge.","Stratford-upon-Avon.","London."]},
+  {ch:"Famous Britons", q:"Which country house of great architectural significance was built in Derbyshire after the Middle Ages?", a:"Hardwick Hall — as the countryside grew more peaceful and landowners richer, British styles of architecture began to evolve.", d:["Royal Albert Hall.","Kensington Palace.","Elgin Manor."]},
   {ch:"Famous Britons", q:"Who proposed the theory of evolution by natural selection in On the Origin of Species?", a:"Charles Darwin.", m:"Darwin + finches = evolution — \"survival of the fittest finch.\"", d:["Isaac Newton.","Alexander Fleming.","Gregor Mendel."]},
   {ch:"Famous Britons", q:"Who discovered penicillin, and roughly when?", a:"Alexander Fleming, in 1928.", m:"Fleming's messy petri dish accidentally grew mould that killed bacteria — \"a mould that saved millions,\" 1928.", d:["Isaac Newton, in 1687.","Louis Pasteur, in 1861.","Edward Jenner, in 1796."]},
   {ch:"Famous Britons", q:"Who is credited with inventing the World Wide Web?", a:"Sir Tim Berners-Lee, a British computer scientist.", m:"Berners-Lee \"wove\" the World Wide Web — web, weave, WWW.", d:["Alan Turing.","Stephen Hawking.","Charles Babbage."]},
