@@ -585,7 +585,7 @@
         <li><strong>45 minutes</strong> on the clock, counting down.</li>
         <li><strong>Pass mark: 18/24 (75%)</strong> — no negative marking, so answer everything.</li>
         <li>No feedback until you submit — just like sitting the real thing.</li>
-        <li>Questions are randomly drawn fresh from the full 210-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
+        <li>Questions are randomly drawn fresh from the full <span id="examBankSize">card</span> bank each time — a mix of multiple choice and True/False — so every attempt is a different mix, the same way the real test draws from its own larger bank.</li>
       </ul>
       <button class="primary" id="examStartBtn">Start 45-Minute Mock Exam</button>
       <div class="exam-history" id="examHistory"></div>
@@ -909,11 +909,170 @@ const CARDS = [
   {ch:"Mock Exam", q:"What was the Gunpowder Plot year?", a:"1605.", d:["1588.","1649.","1666."]},
   {ch:"Mock Exam", q:"Name the four nations of the UK.", a:"England, Scotland, Wales, Northern Ireland.", d:["England, Scotland, Wales, Republic of Ireland.","Great Britain, Northern Ireland, Isle of Man, Channel Islands.","England, Scotland, Northern Ireland, Isle of Man."]},
   {ch:"Mock Exam", q:"What is council tax used to fund?", a:"Local government services.", d:["The National Health Service.","The state pension system.","National defence."]},
+
+  // History Deep Dive — added from personal study notes, covering questions previously missed
+  {ch:"History Deep Dive", q:"When farmers came to Britain around 6,000 years ago, they built tombs and monuments.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"The Battle of Hastings in 1066 is commemorated in the Bayeux Tapestry.", type:"tf", a:"True.", note:"An embroidered depiction of the Norman Conquest, showing William's victory over King Harold."},
+  {ch:"History Deep Dive", q:"Which king of England introduced the Statute of Rhuddlan, annexing Wales to the Crown of England?", a:"Edward I, in 1284.", d:["Edward III, in 1307.","Henry III, in 1272.","King John, in 1215."]},
+  {ch:"History Deep Dive", q:"The Wars of the Roses (1455–1485) were fought between which two rival houses?", a:"The House of Lancaster and the House of York.", d:["The House of Tudor and the House of Stuart.","The House of Normandy and the House of Plantagenet.","The House of Hanover and the House of Windsor."]},
+  {ch:"History Deep Dive", q:"Mary I, known as 'Bloody Mary,' persecuted Protestants because she was a devout Catholic.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"During the English Civil War, what were supporters of Charles I known as?", a:"Cavaliers.", d:["Roundheads.","Chartists.","Jacobites."]},
+  {ch:"History Deep Dive", q:"What were supporters of Parliament known as during the English Civil War?", a:"Roundheads.", d:["Cavaliers.","Chartists.","Jacobites."]},
+  {ch:"History Deep Dive", q:"Charles I went 11 years without recalling Parliament before finally doing so in 1640 to ask for funds.", type:"tf", a:"True.", note:"He needed money to fight a Scottish army after trying to impose his Prayer Book on the Presbyterian Church in Scotland."},
+  {ch:"History Deep Dive", q:"In 1641, Parliament used unrest from a rebellion in Ireland (sparked by Catholic fears of growing Puritan power) as an opportunity to demand control of the English army from Charles I.", type:"tf", a:"True.", note:"This demand would have transferred substantial power from the king to Parliament, and was a major step toward civil war."},
+  {ch:"History Deep Dive", q:"At which two battles was Charles I's army decisively defeated during the Civil War?", a:"Marston Moor and Naseby.", d:["Trafalgar and Waterloo.","Bosworth Field and Culloden.","Hastings and Agincourt."]},
+  {ch:"History Deep Dive", q:"When James II fled England for France in 1688, who had arrived to take the throne?", a:"William of Orange.", d:["Oliver Cromwell.","Charles II.","George I."]},
+  {ch:"History Deep Dive", q:"The Bill of Rights of 1689 required a new Parliament to be elected at least every 3 years (later changed to 7, then 5).", type:"tf", a:"True.", note:"It also confirmed Parliament's rights and limited the monarch's power, requiring annual funding requests for the army and navy."},
+  {ch:"History Deep Dive", q:"At the Battle of the Boyne in 1690, William III defeated which former king in Ireland?", a:"James II.", d:["Charles I.","Charles II.","George I."]},
+  {ch:"History Deep Dive", q:"Which king was Anne's nearest Protestant relative, brought over from Germany to found the Hanoverian dynasty?", a:"George I.", d:["George II.","William III.","James I."]},
+  {ch:"History Deep Dive", q:"The 13 American colonies declared 'no taxation without representation' in 1776, and Britain recognised their independence in 1783.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"Which evangelical Christian campaigned to help abolish the slave trade in Britain?", a:"William Wilberforce.", d:["William Beveridge.","William Wordsworth.","William Caxton."]},
+  {ch:"History Deep Dive", q:"The Battle of Trafalgar, where Admiral Nelson won but died, took place in 1815.", type:"tf", a:"False.", note:"Trafalgar was in 1805. 1815 was the Battle of Waterloo, where the Duke of Wellington defeated Napoleon — a different battle, ten years later.", m:"Easy mix-up: Trafalgar (1805) = Nelson, at sea. Waterloo (1815) = Wellington, on land."},
+  {ch:"History Deep Dive", q:"What were the Reform Act of 1832's old, abolished types of parliamentary seats called?", a:"Pocket and rotten boroughs.", d:["Shire and burgh seats.","Crown and county seats.","Royal and free boroughs."]},
+  {ch:"History Deep Dive", q:"Which of these was NOT one of the Chartists' six demands for electoral reform?", a:"Votes for women.", d:["A vote for every man.","Secret ballots.","Payment of MPs."], m:"The Chartists campaigned for male suffrage — women's votes came later, via the suffragettes/suffragists."},
+  {ch:"History Deep Dive", q:"By 1901, the British Empire had grown to include around 400 million people.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"Acts of Parliament in 1870 and 1882 gave married women in Britain the right to keep their own earnings and property.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"What major public event, celebrating industry and design, was held in London in 1851?", a:"The Great Exhibition.", d:["The Festival of Britain.","The Millennium Dome.","The London Eye opening."]},
+  {ch:"History Deep Dive", q:"The Crimean War (1853–1856) saw England, France, and Turkey fight against which country?", a:"Russia.", d:["Germany.","Spain.","The Netherlands."], m:"It introduced the Victoria Cross and was the first war extensively covered by the media."},
+  {ch:"History Deep Dive", q:"The Easter Rising of 1916 was an uprising by Irish nationalists against British rule in Dublin.", type:"tf", a:"True.", note:"Its leaders were executed under military law; it followed the postponement of Irish Home Rule due to WWI."},
+  {ch:"History Deep Dive", q:"BBC radio began broadcasting in 1922, and the world's first regular television service started in 1936.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"What is the name given to the period of violent conflict in Northern Ireland that began around 1969, largely over whether it should remain part of the UK?", a:"The Troubles.", d:["The Easter Rising.","The Home Rule Crisis.","The Belfast Blitz."]},
+  {ch:"History Deep Dive", q:"What does the minting of the first coins in Britain mark the beginning of, according to the handbook?", a:"The beginning of recorded British history (the Iron Age).", d:["The start of the Roman occupation.","The beginning of the Bronze Age.","The founding of London."]},
+  {ch:"History Deep Dive", q:"During the Enlightenment, who developed influential new ideas about economics?", a:"Adam Smith.", d:["David Hume.","James Watt.","Isaac Newton."]},
+  {ch:"History Deep Dive", q:"During the Enlightenment, who developed influential new ideas about human nature?", a:"David Hume.", d:["Adam Smith.","James Watt.","Charles Darwin."]},
+  {ch:"History Deep Dive", q:"Which process, developed during the Industrial Revolution, allowed steel to be mass-produced?", a:"The Bessemer process.", d:["The Bevin process.","The Beveridge process.","The Bramah process."]},
+  {ch:"History Deep Dive", q:"Which Industrial Revolution figure, who first worked as a barber, pioneered efficient factory innovations?", a:"Richard Arkwright.", d:["James Watt.","Isambard Kingdom Brunel.","George Stephenson."]},
+  {ch:"History Deep Dive", q:"Captain James Cook charted and explored which regions on behalf of Britain?", a:"Australia and parts of southern Africa.", d:["Canada and the Caribbean.","India and China.","The Falkland Islands and St Helena."]},
+  {ch:"History Deep Dive", q:"In Scotland, laws in the Middle Ages developed differently than in England, becoming 'codified' — written down — rather than following common law.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"Who is credited with opening the first curry house in England?", a:"Dean Mahomet.", d:["William Caxton.","Richard Arkwright.","Robert Burns."]},
+  {ch:"History Deep Dive", q:"The Reformation was a 16th-century movement against the authority of the Pope and the practices of the Roman Catholic Church.", type:"tf", a:"True.", note:"Protestants began reading the Bible in their own languages rather than Latin, and stopped praying to saints or at shrines."},
+  {ch:"History Deep Dive", q:"Who designed English country house grounds to look naturally landscaped, and was known for saying a place had 'capabilities'?", a:"Lancelot 'Capability' Brown.", d:["John Constable.","Joseph Turner.","David Hockney."]},
+  {ch:"History Deep Dive", q:"Who was the first person in England to print books using a printing press, with 'The Canterbury Tales' as his first printed book?", a:"William Caxton.", d:["Dean Mahomet.","Richard Arkwright.","John Barbour."]},
+  {ch:"History Deep Dive", q:"Who is known as 'the mother of modern nursing,' having trained in Turkey during the Crimean War?", a:"Florence Nightingale.", d:["Emmeline Pankhurst.","Jane Austen.","Mary Wollstonecraft."]},
+  {ch:"History Deep Dive", q:"The Boer War was fought between Britain and Boer settlers (of Dutch descent) in which region?", a:"South Africa.", d:["East Africa.","West Africa.","Australia."], m:"It marked the start of the shift from Empire to Commonwealth."},
+  {ch:"History Deep Dive", q:"The modern Commonwealth has around 56 member states, with Gabon and Togo joining in 2022.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"What event triggered the start of the First World War?", a:"The assassination of Archduke Franz Ferdinand of Austria.", d:["The German invasion of Poland.","The sinking of the Lusitania.","The Treaty of Versailles."]},
+  {ch:"History Deep Dive", q:"Which two RAF fighter planes were flown during the Battle of Britain in 1940?", a:"The Spitfire and the Hurricane.", d:["The Lancaster and the Wellington.","The Concorde and the Vulcan.","The Harrier and the Typhoon."]},
+  {ch:"History Deep Dive", q:"Winston Churchill was voted the 'Greatest Briton' of all time in a 2002 poll.", type:"tf", a:"True.", note:"He lost the 1945 general election but returned as PM again in 1951."},
+  {ch:"History Deep Dive", q:"Which post-WWII Labour Prime Minister (1945–1951) introduced the welfare state and created the NHS?", a:"Clement Attlee.", d:["Aneurin Bevan.","Harold Macmillan.","William Beveridge."], m:"Attlee was the PM; Bevan (his health minister) was the one who actually built the NHS."},
+  {ch:"History Deep Dive", q:"In 1947, independence was granted to India, Pakistan, and Sri Lanka, followed later by colonies in Africa, the Caribbean, and the Pacific.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"Which Conservative Prime Minister of the 1950s is remembered for his 'Wind of Change' speech about decolonisation?", a:"Harold Macmillan.", d:["John Major.","Anthony Eden.","Edward Heath."]},
+  {ch:"History Deep Dive", q:"William Beveridge's report identified which 'five giant evils' that the welfare state should fight?", a:"Want, disease, ignorance, squalor, and idleness.", d:["Poverty, crime, disease, hunger, and war.","Ignorance, unemployment, sickness, homelessness, and injustice.","Want, war, crime, illiteracy, and famine."]},
+  {ch:"History Deep Dive", q:"Who introduced free secondary education in England and Wales through the Education Act of 1944?", a:"Richard Austin Butler.", d:["William Beveridge.","Clement Attlee.","Aneurin Bevan."]},
+  {ch:"History Deep Dive", q:"Which Welsh poet and writer wrote 'Under Milk Wood' and 'Do Not Go Gentle Into That Good Night'?", a:"Dylan Thomas.", d:["Roald Dahl.","Robert Browning.","William Wordsworth."]},
+  {ch:"History Deep Dive", q:"Who developed radar, an invention used to detect aircraft and ships?", a:"Robert Watson-Watt.", d:["John Logie Baird.","Frank Whittle.","Christopher Cockerell."]},
+  {ch:"History Deep Dive", q:"Who is credited with inventing television?", a:"John Logie Baird.", d:["Robert Watson-Watt.","Alan Turing.","Tim Berners-Lee."]},
+  {ch:"History Deep Dive", q:"Who discovered the structure of the DNA molecule, working in London and Cambridge?", a:"Francis Crick.", d:["Alexander Fleming.","John Macleod.","Peter Mansfield."]},
+  {ch:"History Deep Dive", q:"Who invented the jet engine?", a:"Frank Whittle.", d:["Christopher Cockerell.","Robert Watson-Watt.","Barnes Wallis."]},
+  {ch:"History Deep Dive", q:"Who invented the hovercraft?", a:"Christopher Cockerell.", d:["Frank Whittle.","John Logie Baird.","Robert Watson-Watt."]},
+  {ch:"History Deep Dive", q:"Which two scientists are credited with cloning Dolly the Sheep, the first cloned mammal?", a:"Sir Ian Wilmut and Keith Campbell.", d:["Robert Edwards and Patrick Steptoe.","Francis Crick and James Watson.","Alexander Fleming and John Macleod."]},
+  {ch:"History Deep Dive", q:"Which two scientists developed IVF (in vitro fertilisation)?", a:"Sir Robert Edwards and Patrick Steptoe.", d:["Sir Ian Wilmut and Keith Campbell.","John Macleod and Frederick Banting.","Peter Mansfield and Paul Lauterbur."]},
+  {ch:"History Deep Dive", q:"In 1972, unrest in Northern Ireland led to its Parliament being suspended and ruled directly by the UK government.", type:"tf", a:"True."},
+  {ch:"History Deep Dive", q:"Which Prime Minister succeeded Margaret Thatcher in 1990?", a:"John Major.", d:["Tony Blair.","David Cameron.","Gordon Brown."], m:"Major went on to help establish the Northern Ireland Peace Process."},
+  {ch:"History Deep Dive", q:"Tony Blair was Prime Minister from 1997 to 2010, and introduced the Scottish Parliament and Welsh Assembly.", type:"tf", a:"False.", note:"Blair was PM from 1997 to 2007 — Gordon Brown took over from 2007 to 2010. Blair did introduce the Scottish Parliament and Welsh Assembly (Senedd), alongside the 1998 Good Friday Agreement."},
+  {ch:"History Deep Dive", q:"Which Prime Minister called the 2016 EU membership referendum, and was succeeded by Theresa May after the Leave result?", a:"David Cameron.", d:["Tony Blair.","Gordon Brown.","John Major."]},
+  {ch:"History Deep Dive", q:"Which British overseas territory was attacked by Argentina in 1982, leading to a war?", a:"The Falkland Islands.", d:["St Helena.","The Channel Islands.","Gibraltar."]},
+  {ch:"History Deep Dive", q:"Besides the Isle of Man, which island group is a Crown Dependency rather than part of the UK?", a:"The Channel Islands.", d:["The Falkland Islands.","The Orkney Islands.","The Isles of Scilly."]},
+
+  // Famous People — scientists, sportspeople, arts & culture from personal study notes
+  {ch:"Famous People", q:"Which scientist known for splitting the atom also worked on the Manhattan Project?", a:"Ernest Rutherford.", d:["Peter Mansfield.","Robert Watson-Watt.","Alexander Fleming."]},
+  {ch:"Famous People", q:"Who co-invented the MRI scanner?", a:"Peter Mansfield.", d:["Ernest Rutherford.","Francis Crick.","John Macleod."]},
+  {ch:"Famous People", q:"Who was the first person to run a mile in under 4 minutes?", a:"Roger Bannister.", d:["Bobby Moore.","Steve Redgrave.","Chris Hoy."]},
+  {ch:"Famous People", q:"Who captained the English football team to win the 1966 World Cup?", a:"Bobby Moore.", d:["Roger Bannister.","David Beckham.","Andy Murray."]},
+  {ch:"Famous People", q:"Which Scottish sportsperson was a famous racing driver?", a:"Jackie Stewart.", d:["Chris Hoy.","Andy Murray.","Bradley Wiggins."]},
+  {ch:"Famous People", q:"Which cricketer holds British records for both batting and bowling?", a:"Ian Botham.", d:["Bobby Moore.","Roger Bannister.","Steve Redgrave."]},
+  {ch:"Famous People", q:"Which ice dancing pair are famous British Olympic gold medalists?", a:"Jayne Torvill and Christopher Dean.", d:["Jessica Ennis and Mo Farah.","Kelly Holmes and Tanni Grey-Thompson.","David Weir and Ellie Simmonds."]},
+  {ch:"Famous People", q:"Which rower won multiple Olympic gold medals for Britain?", a:"Steve Redgrave.", d:["Chris Hoy.","Bradley Wiggins.","Andy Murray."]},
+  {ch:"Famous People", q:"Which Paralympic athlete won the London Marathon six times and broke over 30 world records?", a:"Tanni Grey-Thompson.", d:["Ellie Simmonds.","Jessica Ennis.","Kelly Holmes."]},
+  {ch:"Famous People", q:"Which British sailor was the fastest person to sail single-handedly around the world?", a:"Ellen MacArthur.", d:["Tanni Grey-Thompson.","Jackie Stewart.","Kelly Holmes."]},
+  {ch:"Famous People", q:"Which British cyclist won multiple Olympic gold medals?", a:"Chris Hoy.", d:["Ian Botham.","Jackie Stewart.","Ellen MacArthur."]},
+  {ch:"Famous People", q:"Which cyclist was the first Briton to win the Tour de France?", a:"Bradley Wiggins.", d:["Chris Hoy.","Andy Murray.","Mo Farah."]},
+  {ch:"Famous People", q:"Which distance runner, born in Somalia, became one of Britain's most decorated Olympians?", a:"Mo Farah.", d:["Chris Hoy.","Ian Botham.","Bradley Wiggins."]},
+  {ch:"Famous People", q:"Which British athlete won Olympic gold in the heptathlon?", a:"Jessica Ennis.", d:["Kelly Holmes.","Tanni Grey-Thompson.","Ellie Simmonds."]},
+  {ch:"Famous People", q:"Which Scottish tennis player won the US Open men's singles title?", a:"Andy Murray.", d:["Roger Bannister.","Jackie Stewart.","Bradley Wiggins."]},
+  {ch:"Famous People", q:"Which medieval poem tells the story of one of King Arthur's knights?", a:"Sir Gawain and the Green Knight.", d:["Beowulf.","The Bruce.","Canterbury Tales."]},
+  {ch:"Famous People", q:"Which four British actors have all won Oscars, according to the handbook's examples?", a:"Colin Firth, Anthony Hopkins, Judi Dench, and Kate Winslet.", d:["Alfred Hitchcock, Alexander Korda, Nick Park, and Henry Moore.","David Hockney, Lucian Freud, John Constable, and Joseph Turner.","Andrew Lloyd Webber, William Walton, Handel, and Purcell."]},
+  {ch:"Famous People", q:"Who wrote the poem 'The Tyger' — 'In the forests of the night, what immortal hand or eye…'?", a:"William Blake.", d:["George Frideric Handel.","William Walton.","Robert Browning."], m:"Blake was a poet, not a composer — don't confuse him with the musical names nearby on this list."},
+  {ch:"Famous People", q:"Which composer wrote 'Messiah', traditionally performed around Easter?", a:"George Frideric Handel.", d:["William Walton.","Henry Purcell.","Andrew Lloyd Webber."]},
+  {ch:"Famous People", q:"Which composer wrote coronation/celebratory marches for both George VI and Elizabeth II?", a:"William Walton.", d:["George Frideric Handel.","Henry Purcell.","Edward Elgar."]},
+  {ch:"Famous People", q:"Which musical theatre composer wrote Cats, The Phantom of the Opera, and Evita?", a:"Andrew Lloyd Webber.", d:["William Walton.","George Frideric Handel.","Henry Purcell."]},
+  {ch:"Famous People", q:"Which author wrote the satirical novel 'Brideshead Revisited'?", a:"Evelyn Waugh.", d:["Charles Dickens.","Thomas Hardy.","Kingsley Amis."]},
+  {ch:"Famous People", q:"Which author wrote Dr Jekyll and Mr Hyde, and Treasure Island?", a:"Robert Louis Stevenson.", d:["Sir Arthur Conan Doyle.","Charles Dickens.","Thomas Hardy."]},
+  {ch:"Famous People", q:"Which author created the detective Sherlock Holmes?", a:"Sir Arthur Conan Doyle.", d:["Robert Louis Stevenson.","Charles Dickens.","Agatha Christie."]},
+  {ch:"Famous People", q:"Which novelist wrote 'Jude the Obscure'?", a:"Thomas Hardy.", d:["Charles Dickens.","Robert Louis Stevenson.","Evelyn Waugh."]},
+  {ch:"Famous People", q:"Which animator created Wallace and Gromit?", a:"Nick Park.", d:["Alfred Hitchcock.","Alexander Korda.","John Constable."]},
+  {ch:"Famous People", q:"Which British writers have won the Nobel Prize in Literature?", a:"William Golding, Seamus Heaney, and Harold Pinter.", d:["Charles Dickens, Thomas Hardy, and Jane Austen.","Dylan Thomas, Robert Browning, and William Wordsworth.","Roald Dahl, Evelyn Waugh, and Kingsley Amis."]},
+  {ch:"Famous People", q:"Which composer served as organist at Westminster Abbey?", a:"Henry Purcell.", d:["George Frideric Handel.","William Walton.","Andrew Lloyd Webber."]},
+  {ch:"Famous People", q:"Which British painter is famous for 'Dedham Vale' and other landscape works?", a:"John Constable.", d:["Joseph Turner.","Thomas Gainsborough.","David Hockney."]},
+  {ch:"Famous People", q:"Which modern British artist, known for portraits, became one of the most influential painters of the 20th century?", a:"Lucian Freud.", d:["David Hockney.","Henry Moore.","John Constable."]},
+  {ch:"Famous People", q:"Which British artist and sculptor is known for large abstract bronze and stone sculptures?", a:"Henry Moore.", d:["Lucian Freud.","David Hockney.","John Constable."]},
+  {ch:"Famous People", q:"Which two modern British fashion designers are known internationally, one famous for skull motifs and punk-influenced designs?", a:"Alexander McQueen and Vivienne Westwood.", d:["Thomas Chippendale and Clarice Cliff.","David Hockney and Lucian Freud.","John Constable and Joseph Turner."]},
+  {ch:"Famous People", q:"Which 18th-century furniture designer gave his name to a famous style of chair?", a:"Thomas Chippendale.", d:["Clarice Cliff.","Alexander McQueen.","Josiah Wedgwood."]},
+  {ch:"Famous People", q:"Which poet wrote 'Home Thoughts, from Abroad'?", a:"Robert Browning.", d:["William Wordsworth.","William Blake.","Dylan Thomas."]},
+  {ch:"Famous People", q:"Which poet is especially known for verse inspired by nature, closely associated with the Lake District?", a:"William Wordsworth.", d:["Robert Browning.","William Blake.","Robert Burns."]},
+  {ch:"Famous People", q:"Which two British filmmakers are named as influential figures in early cinema?", a:"Alfred Hitchcock and Alexander Korda.", d:["Nick Park and David Hockney.","John Constable and Joseph Turner.","Andrew Lloyd Webber and William Walton."]},
+  {ch:"Famous People", q:"Which two shows are named as classic examples of British TV satire?", a:"'That Was The Week That Was' and 'Spitting Image'.", d:["'Monty Python' and 'Blackadder'.","'EastEnders' and 'Coronation Street'.","'The Office' and 'Fawlty Towers'."]},
+  {ch:"Famous People", q:"Which two long-running British soap operas are specifically named in the handbook?", a:"EastEnders and Coronation Street.", d:["Emmerdale and Hollyoaks.","'That Was The Week That Was' and 'Spitting Image'.","Doctor Who and Casualty."]},
+  {ch:"Famous People", q:"Which group of 19th-century painters created highly detailed pictures on religious and literary themes?", a:"The Pre-Raphaelites.", d:["The Impressionists.","The Bloomsbury Group.","The Angry Young Men."]},
+  {ch:"Famous People", q:"Golf originated in which country, in around the 15th century?", a:"Scotland.", d:["England.","Ireland.","Wales."]},
+  {ch:"Famous People", q:"Cricket originated in England — what is the name of the historic competition between England and Australia?", a:"The Ashes.", d:["The Six Nations.","The Super League.","The Ryder Cup."]},
+  {ch:"Famous People", q:"Which six nations compete in the Six Nations rugby championship?", a:"England, Ireland, Scotland, Wales, France, and Italy.", d:["England, Scotland, Wales, Ireland, Germany, and Spain.","England, France, Italy, Spain, Portugal, and Wales.","Scotland, Ireland, Wales, England, Australia, and New Zealand."]},
+
+  // Famous Places — landmarks, gardens, and stadiums from personal study notes
+  {ch:"Famous Places", q:"Which Isle of Wight town is famous for its sailing events?", a:"Cowes.", d:["Ryde.","Newport.","Sandown."]},
+  {ch:"Famous Places", q:"Which famous gardens are named in the handbook as examples of British horticulture (besides Chelsea)?", a:"Kew, Sissinghurst, and Hidcote.", d:["Kew, Hyde Park, and Regent's Park.","Sissinghurst, Stonehenge, and Snowdonia.","Hidcote, Blenheim, and Windsor."]},
+  {ch:"Famous Places", q:"Which national stadium is located in Cardiff?", a:"The Millennium Stadium.", d:["Wembley Stadium.","Murrayfield.","Hampden Park."]},
+  {ch:"Famous Places", q:"Big Ben, over 150 years old, is officially known as what since 2012?", a:"Elizabeth Tower.", d:["Victoria Tower.","Clock Tower.","Westminster Tower."]},
+  {ch:"Famous Places", q:"The Eden Project, home to plants from all over the world, is located in which county?", a:"Cornwall.", d:["Devon.","Kent.","Dorset."]},
+  {ch:"Famous Places", q:"Which body looks after Edinburgh Castle?", a:"Historic Scotland.", d:["The National Trust.","English Heritage.","The Crown Estate."]},
+  {ch:"Famous Places", q:"The Giant's Causeway, made from volcanic rock formed 50 million years ago, is located where?", a:"Northern Ireland.", d:["Scotland.","Wales.","Cornwall."]},
+  {ch:"Famous Places", q:"The London Eye was built to celebrate which event?", a:"The new millennium.", d:["The Queen's Golden Jubilee.","The 2012 Olympics.","VE Day."]},
+  {ch:"Famous Places", q:"The Tower of London, where the Crown Jewels are kept, is guarded by tour guides known as what?", a:"Beefeaters.", d:["Yeomen Warders' apprentices.","Redcoats.","Grenadiers."], m:"It was originally built by William the Conqueror."},
+  {ch:"Famous Places", q:"Which is the largest national park in England, covering 885 square miles?", a:"The Lake District.", d:["The Peak District.","Snowdonia.","The New Forest."]},
+  {ch:"Famous Places", q:"Maiden Castle, a large Iron Age hillfort, is located in which English county?", a:"Dorset.", d:["Cornwall.","Wiltshire.","Devon."]},
+  {ch:"Famous Places", q:"What is the name for the longest distance route across mainland Britain, from the far north of Scotland to the southwest tip of England?", a:"John o'Groats to Land's End.", d:["Edinburgh to London.","Belfast to Dover.","Cardiff to Aberdeen."]},
+  {ch:"Famous Places", q:"In which three years has the UK hosted the Summer Olympics?", a:"1908, 1948, and 2012.", d:["1900, 1948, and 2008.","1908, 1936, and 2012.","1948, 2000, and 2012."]},
+  {ch:"Famous Places", q:"Where was the first tennis club founded, in 1872?", a:"Leamington Spa, England.", d:["Wimbledon, London.","Edinburgh, Scotland.","Bath, England."]},
+  {ch:"Famous Places", q:"Which is the oldest continuously working film studio facility in the world?", a:"Ealing Studios.", d:["Pinewood Studios.","Shepperton Studios.","Elstree Studios."]},
+  {ch:"Famous Places", q:"Films were first shown publicly in Britain in 1896.", type:"tf", a:"True."},
+  {ch:"Famous Places", q:"The National Trust, which keeps many national parks and historic sites open, was founded in 1895 by how many volunteers?", a:"3 volunteers.", d:["10 volunteers.","1 volunteer, a wealthy philanthropist.","50 volunteers."]},
+  {ch:"Famous Places", q:"There are 15 national parks across England, Wales, and Scotland.", type:"tf", a:"True."},
+  {ch:"Famous Places", q:"Mount Stewart, a famous garden, is located in which UK nation?", a:"Northern Ireland.", d:["Scotland.","Wales.","England."]},
+  {ch:"Famous Places", q:"The White Tower, a Norman castle keep within the Tower of London, was built by whom?", a:"William the Conqueror.", d:["Henry VIII.","Edward I.","Richard the Lionheart."]},
+
+  // Gov & Courts Detail — cabinet, courts, and devolved administrations from personal study notes
+  {ch:"Gov & Courts Detail", q:"Which cabinet role is responsible for managing the UK economy?", a:"Chancellor of the Exchequer.", d:["Home Secretary.","Foreign Secretary.","Secretary of State for Business."]},
+  {ch:"Gov & Courts Detail", q:"Which cabinet role covers crime, policing, and immigration?", a:"Home Secretary.", d:["Chancellor of the Exchequer.","Foreign Secretary.","Lord Chancellor."]},
+  {ch:"Gov & Courts Detail", q:"Which cabinet role manages relationships with foreign countries?", a:"Foreign Secretary.", d:["Home Secretary.","Chancellor of the Exchequer.","Secretary of State for Defence."]},
+  {ch:"Gov & Courts Detail", q:"A by-election is held when an MP dies or resigns between general elections, to fill the vacant seat.", type:"tf", a:"True."},
+  {ch:"Gov & Courts Detail", q:"In Scotland, which court handles the most serious criminal cases?", a:"The High Court.", d:["The Sheriff Court.","The Justice of the Peace Court.","The Crown Court."]},
+  {ch:"Gov & Courts Detail", q:"In Scotland, which court handles serious (but not the most serious) criminal cases?", a:"The Sheriff Court.", d:["The High Court.","The Justice of the Peace Court.","The Magistrates' Court."], m:"Scotland's youth court system is the separate Children's Hearing System, not the Sheriff Court."},
+  {ch:"Gov & Courts Detail", q:"What is Scotland's youth court system called?", a:"The Children's Hearing System.", d:["The Sheriff Court.","The Justice of the Peace Court.","The Juvenile Tribunal."]},
+  {ch:"Gov & Courts Detail", q:"In Scotland, which court handles minor criminal cases?", a:"The Justice of the Peace Court.", d:["The Sheriff Court.","The High Court.","The Magistrates' Court."]},
+  {ch:"Gov & Courts Detail", q:"Northern Ireland has the smallest population of the four UK nations, at under 3% of the UK total.", type:"tf", a:"True."},
+  {ch:"Gov & Courts Detail", q:"How many members sit in the Senedd (Welsh Parliament), and how often are elections held?", a:"60 members, elected every 4 years.", d:["129 members, elected every 4 years.","90 members, elected every 5 years.","60 members, elected every 5 years."]},
+  {ch:"Gov & Courts Detail", q:"How many members sit in the Scottish Parliament, formed in 1999?", a:"129 members.", d:["60 members.","90 members.","150 members."]},
+  {ch:"Gov & Courts Detail", q:"How many elected members (MLAs) sit in the Northern Ireland Assembly?", a:"90 members.", d:["129 members.","60 members.","108 members."]},
+  {ch:"Gov & Courts Detail", q:"The Northern Ireland Assembly was originally established in 1922, abolished in 1972, and re-established after the 1998 Belfast (Good Friday) Agreement.", type:"tf", a:"True."},
+  {ch:"Gov & Courts Detail", q:"Before 1958, who could sit in the House of Lords?", a:"Those with inherited titles, senior judges, and bishops from the Church of England.", d:["Only life peers appointed by the Prime Minister.","Only elected representatives from each region.","Only members nominated by the monarch directly."]},
+  {ch:"Gov & Courts Detail", q:"Since 1958, how does someone typically become a member of the House of Lords?", a:"The Prime Minister nominates life peers, who are then appointed by the monarch.", d:["They inherit the title automatically.","They are elected by the public.","They are appointed by the Speaker of the House of Commons."]},
+  {ch:"Gov & Courts Detail", q:"Where is Parliament's official record of debates published?", a:"Hansard.", d:["The Gazette.","The Times.","The Register."]},
+  {ch:"Gov & Courts Detail", q:"On what date was the UK's 2016 referendum on EU membership held?", a:"23 June 2016.", d:["31 January 2020.","1 January 2021.","24 June 2016."]},
+  {ch:"Gov & Courts Detail", q:"To vote in a UK election, your name must be on the electoral register.", type:"tf", a:"True."},
+  {ch:"Gov & Courts Detail", q:"Which organisation can people facing discrimination turn to for support, alongside the Equality and Human Rights Commission?", a:"The Citizens Advice Bureau.", d:["The Civil Service.","The Crown Prosecution Service.","Hansard."]},
+  {ch:"Gov & Courts Detail", q:"Which court deals with civil disputes in England and Wales, distinct from criminal courts?", a:"The County Court.", d:["The Crown Court.","The Magistrates' Court.","The Supreme Court."]},
+  {ch:"Gov & Courts Detail", q:"In magistrates' courts, magistrates determine verdicts and decide sentences.", type:"tf", a:"True."},
+  {ch:"Gov & Courts Detail", q:"Who has the power to appoint a Chief Constable in a local police force?", a:"An elected Police and Crime Commissioner.", d:["The Home Secretary directly.","The local Mayor only.","The Prime Minister."]},
+  {ch:"Gov & Courts Detail", q:"By what other two names is the Church of England also known?", a:"The Anglican Church and the Episcopal Church.", d:["The Presbyterian Church and the Methodist Church.","The Catholic Church and the Orthodox Church.","The Reformed Church and the Baptist Church."]},
+  {ch:"Gov & Courts Detail", q:"The Church of England has existed as a Protestant church since the 1530s, with the monarch as its head.", type:"tf", a:"True."},
+  {ch:"Gov & Courts Detail", q:"Salaries for Members of Parliament were introduced during the early 20th century.", type:"tf", a:"True."},
+  {ch:"Gov & Courts Detail", q:"About what share of the UK population has a parent or grandparent who was born outside the UK?", a:"About 10%.", d:["About 25%.","About 2%.","About 40%."]},
 ];
 
 CARDS.forEach((c, i) => c.id = i);
 document.getElementById("cardCountLine").textContent =
   `${CARDS.length} self-authored, handbook-grounded cards · not official test questions`;
+document.getElementById("examBankSize").textContent = `${CARDS.length}-card`;
 
 const STORAGE_KEY = "lituk_flashcard_progress_v1";
 let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
@@ -1075,7 +1234,7 @@ function setMode(newMode) {
 
   const hints = {
     flash: "New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway.",
-    mc: "Pick the answer you think is correct. You'll see the full explanation immediately either way, so wrong guesses still teach you the fact.",
+    mc: "Pick the answer you think is correct — some questions are 4-option multiple choice, others are True/False. You'll see the full explanation immediately either way, so wrong guesses still teach you the fact.",
     exam: "No feedback until the end — this mode mirrors the real 24-question, 45-minute test as closely as possible.",
   };
   modeHint.textContent = hints[mode];
@@ -1170,7 +1329,7 @@ function renderExamQuestion() {
   const q = examQuestions[examIndex];
   examProgressText.textContent = `Question ${examIndex + 1} of ${EXAM_LENGTH}`;
   examTag.textContent = q.ch;
-  examQText.textContent = q.q;
+  examQText.textContent = q.type === "tf" ? `True or False: ${q.q}` : q.q;
 
   examJumpGrid.innerHTML = "";
   examQuestions.forEach((_, i) => {
@@ -1228,10 +1387,11 @@ function renderExamResults() {
   const reviewHtml = examQuestions.map((q, i) => {
     const yourAnswer = examAnswers[i];
     const correct = yourAnswer === q.a;
+    const qLabel = q.type === "tf" ? `True or False: ${q.q}` : q.q;
     return `<div class="review-item ${correct ? "" : "wrong"}">
-      <div class="rq">${i + 1}. ${q.q}</div>
+      <div class="rq">${i + 1}. ${qLabel}</div>
       <div>Your answer: <span class="${correct ? "ra-correct" : "ra-wrong"}">${yourAnswer || "(no answer)"}</span></div>
-      ${correct ? "" : `<div>Correct answer: <span class="ra-correct">${q.a}</span></div>`}
+      ${correct ? "" : `<div>Correct answer: <span class="ra-correct">${displayAnswer(q)}</span></div>`}
       ${(!correct && q.m) ? `<p class="mnemonic">🧠 ${q.m}</p>` : ""}
     </div>`;
   }).join("");
@@ -1255,7 +1415,14 @@ function exitExamWithoutSubmitting() {
   renderExam();
 }
 
+function displayAnswer(c) {
+  return c.type === "tf" && c.note ? `${c.a} ${c.note}` : c.a;
+}
+
 function buildOptionsFor(c) {
+  if (c.type === "tf") {
+    return Math.random() < 0.5 ? ["True.", "False."] : ["False.", "True."];
+  }
   let distractors;
   if (c.d && c.d.length >= 3) {
     // Curated, same-type distractors (e.g. other dates for a date question,
@@ -1306,8 +1473,8 @@ function render() {
   if (mode === "flash") {
     studyArea.style.display = "block";
     mcArea.style.display = "none";
-    qText.textContent = c.q;
-    aText.textContent = c.a;
+    qText.textContent = c.type === "tf" ? `True or False: ${c.q}` : c.q;
+    aText.textContent = displayAnswer(c);
     if (c.m) {
       mText.textContent = "🧠 " + c.m;
       mText.style.display = "block";
@@ -1321,7 +1488,7 @@ function render() {
     studyArea.style.display = "none";
     mcArea.style.display = "block";
     mcTag.textContent = c.ch;
-    mcQText.textContent = c.q;
+    mcQText.textContent = c.type === "tf" ? `True or False: ${c.q}` : c.q;
     if (!mcOptionsCache[idx]) mcOptionsCache[idx] = buildOptionsFor(c);
     renderMcOptions(c);
   }
@@ -1359,7 +1526,7 @@ function selectMcOption(c, chosen, btnEl) {
     else if (btn === btnEl) btn.classList.add("incorrect");
   });
   mcExplanation.style.display = "block";
-  mcExplanation.innerHTML = `<strong>${isCorrect ? "✅ Correct" : "❌ Not quite — here's the fact"}</strong>${c.a}`
+  mcExplanation.innerHTML = `<strong>${isCorrect ? "✅ Correct" : "❌ Not quite — here's the fact"}</strong>${displayAnswer(c)}`
     + (c.m ? `<p class="mnemonic">🧠 ${c.m}</p>` : "");
   const knownCount = deck.filter(c => progress[c.id] === "know").length;
   progressBar.style.width = `${(knownCount / deck.length) * 100}%`;
