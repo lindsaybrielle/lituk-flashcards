@@ -585,7 +585,7 @@
         <li><strong>45 minutes</strong> on the clock, counting down.</li>
         <li><strong>Pass mark: 18/24 (75%)</strong> — no negative marking, so answer everything.</li>
         <li>No feedback until you submit — just like sitting the real thing.</li>
-        <li>Questions are randomly drawn fresh from the full 198-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
+        <li>Questions are randomly drawn fresh from the full 202-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
       </ul>
       <button class="primary" id="examStartBtn">Start 45-Minute Mock Exam</button>
       <div class="exam-history" id="examHistory"></div>
@@ -691,6 +691,7 @@ const CARDS = [
   {ch:"Ch.1 Values", q:"Does British law protect freedom of speech absolutely, with no limits?", a:"No — freedom of speech exists but is limited by law (e.g., laws against inciting violence or hatred).", d:["Yes — there are no legal limits on what a person can say in the UK.","No — public criticism of the government is illegal.","Yes, but only for British-born citizens, not naturalised residents."]},
   {ch:"Ch.1 Values", q:"What is expected regarding participation in community life?", a:"New residents are encouraged to participate in volunteering, local activities, and civic life.", d:["New residents are legally required to join a trade union.","New residents must complete 100 hours of community service before applying for citizenship.","Participation in community life is discouraged until citizenship is granted."]},
   {ch:"Ch.1 Values", q:"What helps make communities a better place?", a:"Residents helping each other.", d:["Residents ignoring each other.","Residents suing each other.","Residents fighting each other."]},
+  {ch:"Ch.1 Values", q:"Who does the UK welcome?", a:"Those seeking to make a positive contribution to society.", d:["Those seeking to be a drain on the government's resources.","Those seeking to promote extremist views.","Those seeking to avoid burdensome responsibilities."]},
 
   // Chapter 2 — What is the UK?
   {ch:"Ch.2 The UK", q:"What are the four nations that make up the United Kingdom?", a:"England, Scotland, Wales, and Northern Ireland.", d:["England, Scotland, Wales, and the Republic of Ireland.","England, Scotland, Northern Ireland, and the Isle of Man.","Great Britain, Northern Ireland, Wales, and the Channel Islands."]},
@@ -795,6 +796,7 @@ const CARDS = [
   {ch:"Ch.4 Modern UK", q:"What is the Chelsea Flower Show?", a:"A famous annual gardening show held in London.", d:["A famous annual air show held in Farnborough.","A famous annual arts festival held in Edinburgh.","A famous annual food and drink festival held in Bath."]},
   {ch:"Ch.4 Modern UK", q:"Where might undercover (indoor) shopping centres be found in the UK?", a:"In town centres or on the outskirts of a town or city — they are common throughout the UK.", d:["Only in shopping districts of major cities.","Only in coastal towns.","Only within 5 miles of London."]},
   {ch:"Ch.4 Modern UK", q:"What is Wimbledon?", a:"The oldest tennis tournament in the world, held annually in London.", d:["The oldest football tournament in the world, held annually in Manchester.","The oldest golf tournament in the world, held annually in St Andrews.","The newest Grand Slam tennis tournament, established in the 1980s."]},
+  {ch:"Ch.4 Modern UK", q:"Near which city is Europe's longest dry ski slope?", a:"Edinburgh — Scotland also has five ski centres for skiing on snow.", d:["Birmingham.","Swansea.","Dundee."]},
   {ch:"Ch.4 Modern UK", q:"Which satirical magazine, the most famous of its kind, first began publication in 1840s Britain?", a:"Punch.", d:["Mad.","National Lampoon.","Charlie Hebdo."]},
   {ch:"Ch.4 Modern UK", q:"What are the two types of rugby played in the UK, each with separate leagues and national teams?", a:"Rugby union and rugby league.", d:["English and Scottish.","Touch and flag.","Individual and club."]},
   {ch:"Ch.4 Modern UK", q:"What is the highest denomination banknote in general circulation in the UK?", a:"£50 (the denominations are £5, £10, £20, and £50).", d:["£20.","£100.","£500."]},
@@ -847,6 +849,7 @@ const CARDS = [
   {ch:"Famous Britons", q:"Who is credited with inventing the World Wide Web?", a:"Sir Tim Berners-Lee, a British computer scientist.", m:"Berners-Lee \"wove\" the World Wide Web — web, weave, WWW.", d:["Alan Turing.","Stephen Hawking.","Charles Babbage."]},
   {ch:"Famous Britons", q:"Which British physicist wrote \"A Brief History of Time\"?", a:"Stephen Hawking.", m:"Hawking wrote about \"Time\" — a brief man with big ideas about the whole universe.", d:["Isaac Newton.","Charles Darwin.","Michael Faraday."]},
   {ch:"Famous Britons", q:"Which Liverpool band became one of the most influential groups in popular music history?", a:"The Beatles.", d:["The Rolling Stones.","Queen.","Pink Floyd."]},
+  {ch:"Famous Britons", q:"Which writer, known for The Jungle Book and Just So Stories, was awarded the Nobel Prize in Literature in 1907?", a:"Rudyard Kipling.", d:["Charles Dickens.","Thomas Hardy.","Arthur Conan Doyle."]},
   {ch:"Famous Britons", q:"What is Sir Edward Elgar's best-known work?", a:"The Pomp and Circumstance Marches — March No. 1 (\"Land of Hope and Glory\") is usually played at the Last Night of the Proms.", d:["Dr Jekyll and Mr Hyde.","Do Not Go Gentle into That Good Night.","The Lord of the Rings."]},
   {ch:"Famous Britons", q:"Which poem is John Milton best known for?", a:"Paradise Lost, inspired by his Protestant religious views.", d:["The Tyger.","The Waste Land.","The Raven."]},
   {ch:"Famous Britons", q:"Which London war memorial was designed by Sir Edwin Lutyens?", a:"The Cenotaph, in Whitehall — he also designed New Delhi as the seat of government in India.", d:["The Dumfries House.","The Tower of London.","St Paul's Cathedral."]},
@@ -859,6 +862,7 @@ const CARDS = [
   {ch:"Legal System", q:"Which court handles the most serious criminal cases in England and Wales, using a jury?", a:"The Crown Court.", m:"The Crown Court wears the crown — it gets the big, serious cases, heard with a jury.", d:["The Magistrates' Court.","The County Court.","The Supreme Court."]},
   {ch:"Legal System", q:"Which court handles minor criminal cases without a jury in England and Wales?", a:"The Magistrates' Court.", m:"Magistrates handle the everyday, minor stuff — no jury needed.", d:["The Crown Court.","The Supreme Court.","The Court of Appeal."]},
   {ch:"Legal System", q:"What is the highest court of appeal in the UK?", a:"The Supreme Court.", d:["The Crown Court.","The House of Lords, in its judicial role today.","The Court of Appeal."]},
+  {ch:"Legal System", q:"Which of the following is an illegal practice in the UK?", a:"Female genital mutilation (FGM).", d:["Working on Sundays.","Sun worshiping.","Arranged marriages (as opposed to forced marriage, which is illegal)."]},
   {ch:"Legal System", q:"In a Youth Court, can members of the public attend the proceedings?", a:"No — members of the public aren't allowed in Youth Courts, and the accused young person's name or photo can't be published either.", d:["Yes, but only if they are family members of the accused.","Yes — Youth Courts are open to the public, just like Crown Court.","Yes, but only accredited journalists may attend, not the general public."]},
 
   // Devolved government locations
