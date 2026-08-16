@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Life in the UK Test — Flashcards</title>
+<title>Life in the UK Test — Study</title>
 <style>
   :root {
     --navy: #0b1f3a;
@@ -49,10 +49,17 @@
     margin: 0 auto;
     padding: 1.2rem 1rem 3rem;
   }
-  .mode-toggle, .mode-hint, details.tips {
+  .intro-line, details.tips {
     max-width: 640px;
     margin-left: auto;
     margin-right: auto;
+  }
+  .intro-line {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin: 0 0 1rem;
+    line-height: 1.5;
   }
   .study-grid {
     display: flex;
@@ -115,134 +122,10 @@
   .analysis-verdict.verdict-good { color: var(--green); }
   .analysis-verdict.verdict-mid { color: var(--amber); }
   .analysis-verdict.verdict-bad { color: var(--red); }
-  .review-banner {
-    background: var(--amber-bg);
-    border: 1px solid #fde68a;
-    color: var(--amber);
-    border-radius: 10px;
-    padding: 0.6rem 0.9rem;
-    font-size: 0.85rem;
-    font-weight: 600;
-    text-align: center;
-    margin-bottom: 0.8rem;
-  }
   @media (max-width: 880px) {
     .study-grid { flex-direction: column; }
     .analysis-panel { flex: 1 1 auto; width: 100%; position: static; max-height: none; }
   }
-  .mode-toggle {
-    display: flex;
-    background: #e5e7eb;
-    border-radius: 10px;
-    padding: 4px;
-    margin-bottom: 0.6rem;
-  }
-  .mode-toggle button {
-    flex: 1;
-    border: none;
-    background: transparent;
-    padding: 0.6rem 0.5rem;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 0.88rem;
-    cursor: pointer;
-    color: var(--muted);
-  }
-  .mode-toggle button.active {
-    background: var(--navy);
-    color: white;
-  }
-  .mode-hint {
-    text-align: center;
-    font-size: 0.78rem;
-    color: var(--muted);
-    margin: 0 0 1rem;
-  }
-
-  /* Timed mock exam */
-  .exam-intro {
-    background: white;
-    border-radius: 14px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-    padding: 1.5rem;
-    text-align: center;
-  }
-  .exam-intro ul {
-    text-align: left;
-    font-size: 0.9rem;
-    line-height: 1.6;
-    max-width: 380px;
-    margin: 1rem auto;
-  }
-  .exam-history {
-    margin-top: 1.2rem;
-    font-size: 0.82rem;
-    text-align: left;
-  }
-  .exam-history table { width: 100%; border-collapse: collapse; }
-  .exam-history td, .exam-history th {
-    padding: 0.3rem 0.4rem;
-    border-bottom: 1px solid #e5e7eb;
-    text-align: left;
-  }
-  .exam-topbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.8rem;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-  }
-  .exam-timer {
-    font-family: "SF Mono", Menlo, monospace;
-    font-size: 1.3rem;
-    font-weight: 700;
-    background: var(--navy);
-    color: white;
-    padding: 0.35rem 0.8rem;
-    border-radius: 8px;
-  }
-  .exam-timer.low { background: var(--red); }
-  .exam-jumpgrid {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 0.35rem;
-    margin-bottom: 1rem;
-  }
-  .exam-dot {
-    aspect-ratio: 1;
-    border-radius: 6px;
-    border: 1px solid #d1d5db;
-    background: white;
-    font-size: 0.75rem;
-    cursor: pointer;
-    padding: 0;
-  }
-  .exam-dot.answered { background: #dbeafe; border-color: #93c5fd; }
-  .exam-dot.current { outline: 2px solid var(--navy); outline-offset: 1px; }
-  .exam-submit-row { text-align: center; margin: 1rem 0; }
-  .pass-banner, .fail-banner {
-    text-align: center;
-    padding: 1.4rem 1rem;
-    border-radius: 14px;
-    margin-bottom: 1.2rem;
-  }
-  .pass-banner { background: var(--green-bg); border: 1px solid #bbf7d0; color: var(--green); }
-  .fail-banner { background: #fef2f2; border: 1px solid #fecaca; color: var(--red); }
-  .pass-banner h2, .fail-banner h2 { margin: 0 0 0.2rem; }
-  .review-item {
-    background: white;
-    border-radius: 10px;
-    padding: 0.8rem 1rem;
-    margin-bottom: 0.6rem;
-    border-left: 4px solid var(--green);
-    font-size: 0.88rem;
-    line-height: 1.4;
-  }
-  .review-item.wrong { border-left-color: var(--red); }
-  .review-item .rq { font-weight: 600; margin-bottom: 0.3rem; }
-  .review-item .ra-wrong { color: var(--red); }
-  .review-item .ra-correct { color: var(--green); }
   .controls {
     display: flex;
     gap: 0.5rem;
@@ -283,40 +166,6 @@
     font-size: 0.85rem;
     margin-bottom: 0.6rem;
   }
-  .card-scene {
-    perspective: 1200px;
-    height: 340px;
-    margin-bottom: 1.2rem;
-  }
-  .card {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    transform-style: preserve-3d;
-    transition: transform 0.45s cubic-bezier(.4,.2,.2,1);
-    cursor: pointer;
-  }
-  .card.flipped { transform: rotateY(180deg); }
-  .face {
-    position: absolute;
-    inset: 0;
-    backface-visibility: hidden;
-    border-radius: 14px;
-    box-shadow: 0 4px 18px rgba(0,0,0,0.12);
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    background: var(--card-bg);
-    border-top: 6px solid var(--navy);
-    overflow-y: auto;
-  }
-  .face.back {
-    transform: rotateY(180deg);
-    border-top: 6px solid var(--red);
-  }
   .tag {
     position: absolute;
     top: 0.7rem;
@@ -327,12 +176,6 @@
     color: var(--muted);
     font-weight: 600;
   }
-  .face p {
-    font-size: 1.1rem;
-    line-height: 1.4;
-    margin: 0;
-  }
-  .face.back p { font-size: 1.05rem; }
   .mnemonic {
     margin-top: 0.8rem !important;
     font-size: 0.82rem !important;
@@ -343,12 +186,6 @@
     padding: 0.5rem 0.7rem;
     line-height: 1.35 !important;
   }
-  .hint {
-    position: absolute;
-    bottom: 0.7rem;
-    font-size: 0.75rem;
-    color: var(--muted);
-  }
   .nav-row {
     display: flex;
     gap: 0.5rem;
@@ -356,23 +193,8 @@
     margin-bottom: 1.4rem;
     flex-wrap: wrap;
   }
-  .rate-row {
-    display: flex;
-    gap: 0.6rem;
-    justify-content: center;
-    margin-bottom: 1.5rem;
-  }
-  .rate-row button {
-    flex: 1;
-    max-width: 160px;
-    font-weight: 600;
-  }
-  .btn-know { border-color: var(--green); color: var(--green); }
-  .btn-know:hover { background: var(--green-bg); }
-  .btn-learning { border-color: var(--amber); color: var(--amber); }
-  .btn-learning:hover { background: var(--amber-bg); }
 
-  /* Multiple choice mode */
+  /* Quiz question */
   .mc-question-box {
     position: relative;
     background: var(--card-bg);
@@ -448,6 +270,22 @@
   .mnemonics-item .mq { font-weight: 600; color: #333; }
   .mnemonics-item .mm { color: var(--amber); font-style: italic; }
 
+  .weak-list { margin-top: 0.4rem; }
+  .weak-list h4 {
+    margin: 1.1rem 0 0.5rem;
+    font-size: 0.88rem;
+    color: var(--navy);
+  }
+  .weak-item {
+    font-size: 0.8rem;
+    line-height: 1.4;
+    margin-bottom: 0.6rem;
+    padding-left: 0.7rem;
+    border-left: 3px solid var(--red);
+  }
+  .weak-item .wq { color: #333; }
+  .weak-item .wmeta { color: var(--muted); font-size: 0.72rem; margin-top: 0.1rem; }
+
   details.tips {
     background: white;
     border-radius: 12px;
@@ -500,119 +338,42 @@
 <body>
 
 <header>
-  <h1>🇬🇧 Life in the UK Test — Flashcards</h1>
+  <h1>🇬🇧 Life in the UK Test — Study</h1>
   <p id="cardCountLine">self-authored, handbook-grounded cards · not official test questions</p>
 </header>
 <div class="stripe"></div>
 
 <main>
-  <div class="mode-toggle">
-    <button id="modeFlashBtn" class="active">📇 Flashcards</button>
-    <button id="modeMcBtn">✅ Multiple Choice</button>
-    <button id="modeExamBtn">⏱ Mock Exam</button>
-  </div>
-  <p class="mode-hint" id="modeHint">New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway.</p>
+  <p class="intro-line">Every card here is something missed on the official study app. Questions are a mix of multiple choice and True/False, and show up more often the more you get them wrong — the panel on the right tracks which areas need the most work.</p>
 
   <div class="study-grid">
   <div class="study-main">
 
   <div class="controls" id="studyControls">
     <select id="chapterSelect"></select>
-    <button id="shuffleBtn">🔀 Shuffle</button>
     <button id="resetProgressBtn">↺ Reset progress</button>
   </div>
-
-  <div id="reviewBanner" class="review-banner" style="display:none;"></div>
 
   <div id="studyChrome">
     <div class="counter" id="counter"></div>
     <div class="progress-bar-wrap"><div class="progress-bar" id="progressBar"></div></div>
   </div>
 
-  <div id="studyArea">
-    <div class="card-scene">
-      <div class="card" id="card">
-        <div class="face front">
-          <span class="tag" id="tagFront">Chapter</span>
-          <p id="qText"></p>
-          <span class="hint">Tap card to reveal answer</span>
-        </div>
-        <div class="face back">
-          <span class="tag" id="tagBack">Answer</span>
-          <p id="aText"></p>
-          <p id="mText" class="mnemonic" style="display:none;"></p>
-          <span class="hint">Tap to flip back</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="rate-row">
-      <button class="btn-learning" id="stillLearningBtn">Still learning</button>
-      <button class="btn-know" id="knowItBtn">Know it ✓</button>
-    </div>
-
-    <div class="nav-row">
-      <button id="prevBtn">← Prev</button>
-      <button class="primary" id="flipBtn">Flip (space)</button>
-      <button id="nextBtn">Next →</button>
-    </div>
-  </div>
-
-  <div id="mcArea" style="display:none;">
+  <div id="quizArea">
     <div class="mc-question-box">
-      <span class="tag" id="mcTag">Chapter</span>
-      <p id="mcQText"></p>
+      <span class="tag" id="quizTag">Chapter</span>
+      <p id="quizQText"></p>
     </div>
-    <div class="mc-options" id="mcOptions"></div>
-    <div class="mc-explanation" id="mcExplanation" style="display:none;"></div>
+    <div class="mc-options" id="quizOptions"></div>
+    <div class="mc-explanation" id="quizExplanation" style="display:none;"></div>
     <div class="nav-row">
-      <button id="mcPrevBtn">← Prev</button>
-      <button class="primary" id="mcNextBtn">Next →</button>
+      <button class="primary" id="nextBtn" style="display:none;">Next question →</button>
     </div>
   </div>
 
-  <div id="doneArea" style="display:none;" class="done-banner">
-    <h2>🎉 Deck complete</h2>
-    <p id="doneStats"></p>
-    <button class="primary" id="restartBtn">Study again</button>
-  </div>
-
-  <div id="examArea" style="display:none;">
-    <div id="examIdle" class="exam-intro">
-      <h2>⏱ Timed Mock Exam</h2>
-      <ul>
-        <li><strong>24 questions</strong>, multiple choice — same as the real test.</li>
-        <li><strong>45 minutes</strong> on the clock, counting down.</li>
-        <li><strong>Pass mark: 18/24 (75%)</strong> — no negative marking, so answer everything.</li>
-        <li>No feedback until you submit — just like sitting the real thing.</li>
-        <li>Questions are randomly drawn fresh from the full <span id="examBankSize">card</span> bank each time — a mix of multiple choice and True/False — so every attempt is a different mix, the same way the real test draws from its own larger bank.</li>
-      </ul>
-      <button class="primary" id="examStartBtn">Start 45-Minute Mock Exam</button>
-      <div class="exam-history" id="examHistory"></div>
-    </div>
-
-    <div id="examRunning" style="display:none;">
-      <div class="exam-topbar">
-        <span id="examProgressText">Question 1 of 24</span>
-        <span class="exam-timer" id="examTimer">45:00</span>
-      </div>
-      <div class="exam-jumpgrid" id="examJumpGrid"></div>
-      <div class="mc-question-box">
-        <span class="tag" id="examTag">Chapter</span>
-        <p id="examQText"></p>
-      </div>
-      <div class="mc-options" id="examOptions"></div>
-      <div class="nav-row">
-        <button id="examPrevBtn">← Prev</button>
-        <button id="examNextBtn">Next →</button>
-      </div>
-      <div class="exam-submit-row">
-        <button class="primary" id="examSubmitBtn">Submit Exam</button>
-        <div><button id="examExitBtn" style="margin-top:0.6rem; font-size:0.78rem; border:none; background:none; color:var(--muted); text-decoration:underline; cursor:pointer;">Exit without submitting</button></div>
-      </div>
-    </div>
-
-    <div id="examFinished" style="display:none;"></div>
+  <div id="emptyState" style="display:none;" class="done-banner">
+    <h2>No cards in this chapter</h2>
+    <p>Pick a different chapter, or choose "All chapters."</p>
   </div>
 
   </div>
@@ -626,7 +387,7 @@
 
   <details class="tips">
     <summary>🧠 Memory tricks (mnemonics) cheat sheet</summary>
-    <p style="font-size:0.82rem; color:#666;">These are self-made memory hooks for the facts people usually find hardest — dates, monarch order, and which symbol belongs to which nation. They also show up automatically under the answer when you hit one of these cards in Flashcard or Multiple Choice mode. One tip from a recent pass: read the tricky ones out loud, repeatedly — that's what worked for them.</p>
+    <p style="font-size:0.82rem; color:#666;">These are self-made memory hooks for the facts people usually find hardest — dates, monarch order, and which symbol belongs to which nation. They also show up automatically under the explanation when you hit one of these cards while studying. One tip from a recent pass: read the tricky ones out loud, repeatedly — that's what worked for them.</p>
     <div id="mnemonicsList"></div>
   </details>
 
@@ -884,32 +645,6 @@ const CARDS = [
   {ch:"Places of Interest", q:"What is the biggest stretch of water in the Lake District?", a:"Windermere. (In 2007, TV viewers voted nearby Wastwater Britain's favourite view — a common mix-up with the biggest-lake question.)", m:"Wind-ermere is the biggest — don't get blown off course by Wastwater, which is just the favourite view.", d:["Ullswater.","Derwentwater.","Coniston Water."]},
   {ch:"Places of Interest", q:"What area does the Lake District cover?", a:"885 square miles (2,292 square kilometres) — England's largest national park.", d:["2,292 square miles.","495 square miles.","225 square miles."]},
 
-  // Mock exam set
-  {ch:"Mock Exam", q:"What year was the Battle of Hastings?", a:"1066.", d:["1215.","1485.","1815."]},
-  {ch:"Mock Exam", q:"What is the capital of Northern Ireland?", a:"Belfast.", d:["Edinburgh.","Cardiff.","Derry."]},
-  {ch:"Mock Exam", q:"Who signed Magna Carta and in what year?", a:"King John, 1215.", d:["King Henry III, 1265.","King Richard I, 1199.","King Edward I, 1295."]},
-  {ch:"Mock Exam", q:"What are the UK's four fundamental values?", a:"Democracy, rule of law, individual liberty, tolerance of different faiths/beliefs.", d:["Democracy, free healthcare, liberty, national pride.","Rule of law, patriotism, religious observance, tolerance.","Individual liberty, capitalism, democracy, military service."]},
-  {ch:"Mock Exam", q:"What is the highest mountain in the UK?", a:"Ben Nevis.", d:["Snowdon (Yr Wyddfa).","Scafell Pike.","Slieve Donard."]},
-  {ch:"Mock Exam", q:"How many MPs sit in the House of Commons?", a:"650.", d:["550.","700.","800."]},
-  {ch:"Mock Exam", q:"What year did the Great Fire of London occur?", a:"1666.", d:["1665.","1605.","1707."]},
-  {ch:"Mock Exam", q:"What is the patron saint of Wales and his day?", a:"St David, 1 March.", d:["St Patrick, 17 March.","St George, 23 April.","St Andrew, 30 November."]},
-  {ch:"Mock Exam", q:"What year did WWII end?", a:"1945.", d:["1918.","1944.","1939."]},
-  {ch:"Mock Exam", q:"Who was Prime Minister through most of WWII?", a:"Winston Churchill.", d:["Neville Chamberlain.","Clement Attlee.","Margaret Thatcher."]},
-  {ch:"Mock Exam", q:"What is the minimum voting age?", a:"18.", d:["16.","21.","25."]},
-  {ch:"Mock Exam", q:"What year was the NHS founded?", a:"1948.", d:["1945.","1951.","1938."]},
-  {ch:"Mock Exam", q:"What are the two chambers of Parliament?", a:"House of Commons and House of Lords.", d:["House of Commons and the Senate.","House of Lords and the Privy Council.","Parliament and the Supreme Court."]},
-  {ch:"Mock Exam", q:"What year did the UK leave the EU?", a:"2020.", d:["2016.","2019.","1973."]},
-  {ch:"Mock Exam", q:"What is the largest lake in the United Kingdom?", a:"Lough Neagh.", d:["Loch Lomond.","Loch Ness.","Windermere."]},
-  {ch:"Mock Exam", q:"What is the maximum time between general elections?", a:"5 years.", d:["4 years.","7 years.","10 years."]},
-  {ch:"Mock Exam", q:"Who is the current monarch?", a:"King Charles III.", d:["Queen Elizabeth II.","Prince William.","Prince Charles, Prince of Wales."]},
-  {ch:"Mock Exam", q:"What happened in 1707?", a:"Act of Union between England and Scotland.", d:["Act of Union between Great Britain and Ireland.","The Glorious Revolution.","The Restoration of the monarchy."]},
-  {ch:"Mock Exam", q:"What ship symbolizes 1948 Commonwealth immigration?", a:"The Empire Windrush.", d:["The Titanic.","HMS Victory.","The Mayflower."]},
-  {ch:"Mock Exam", q:"What electoral system is used in UK general elections?", a:"First past the post.", d:["Proportional representation.","Single transferable vote.","Alternative vote."]},
-  {ch:"Mock Exam", q:"What age range can serve on an England/Wales jury?", a:"18–75.", d:["16–70.","21–65.","18–70."]},
-  {ch:"Mock Exam", q:"What was the Gunpowder Plot year?", a:"1605.", d:["1588.","1649.","1666."]},
-  {ch:"Mock Exam", q:"Name the four nations of the UK.", a:"England, Scotland, Wales, Northern Ireland.", d:["England, Scotland, Wales, Republic of Ireland.","Great Britain, Northern Ireland, Isle of Man, Channel Islands.","England, Scotland, Northern Ireland, Isle of Man."]},
-  {ch:"Mock Exam", q:"What is council tax used to fund?", a:"Local government services.", d:["The National Health Service.","The state pension system.","National defence."]},
-
   // History Deep Dive — added from personal study notes, covering questions previously missed
   {ch:"History Deep Dive", q:"When farmers came to Britain around 6,000 years ago, they built tombs and monuments.", type:"tf", a:"True."},
   {ch:"History Deep Dive", q:"The Battle of Hastings in 1066 is commemorated in the Bayeux Tapestry.", type:"tf", a:"True.", note:"An embroidered depiction of the Norman Conquest, showing William's victory over King Harold."},
@@ -1072,79 +807,55 @@ const CARDS = [
 CARDS.forEach((c, i) => c.id = i);
 document.getElementById("cardCountLine").textContent =
   `${CARDS.length} self-authored, handbook-grounded cards · not official test questions`;
-document.getElementById("examBankSize").textContent = `${CARDS.length}-card`;
 
 const STORAGE_KEY = "lituk_flashcard_progress_v1";
 let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
-let deck = [];
-let idx = 0;
-let flipped = false;
-let mode = "flash"; // "flash" | "mc" | "exam"
-let mcAnswered = false;
-let mcOptionsCache = {}; // deck index -> shuffled options array
-
-let sessionScopeDeck = [];       // the full set of cards for the current chapter selection, fixed for the session
-let missedIds = new Set();       // every card id missed at least once this session (for the analysis panel)
-let currentPassMissed = new Set(); // ids missed during the pass currently in progress (drives the review loop)
-let inReviewPass = false;
-
-const EXAM_LENGTH = 24;
-const EXAM_MINUTES = 45;
-const EXAM_PASS_MARK = 18;
-const EXAM_HISTORY_KEY = "lituk_exam_history_v1";
-let examState = "idle"; // "idle" | "running" | "finished"
-let examQuestions = [];
-let examOptionsCache = [];
-let examAnswers = [];
-let examIndex = 0;
-let examEndTime = null;
-let examTimerInterval = null;
-
-const chapterSelect = document.getElementById("chapterSelect");
-const card = document.getElementById("card");
-const qText = document.getElementById("qText");
-const aText = document.getElementById("aText");
-const mText = document.getElementById("mText");
-const tagFront = document.getElementById("tagFront");
-const tagBack = document.getElementById("tagBack");
-const counter = document.getElementById("counter");
-const progressBar = document.getElementById("progressBar");
-const studyArea = document.getElementById("studyArea");
-const mcArea = document.getElementById("mcArea");
-const doneArea = document.getElementById("doneArea");
-const doneStats = document.getElementById("doneStats");
-const mcQText = document.getElementById("mcQText");
-const mcTag = document.getElementById("mcTag");
-const mcOptionsEl = document.getElementById("mcOptions");
-const mcExplanation = document.getElementById("mcExplanation");
-const modeFlashBtn = document.getElementById("modeFlashBtn");
-const modeMcBtn = document.getElementById("modeMcBtn");
-const modeExamBtn = document.getElementById("modeExamBtn");
-const modeHint = document.getElementById("modeHint");
-const studyChrome = document.getElementById("studyChrome");
-const studyControls = document.getElementById("studyControls");
-const examArea = document.getElementById("examArea");
-const examIdle = document.getElementById("examIdle");
-const examRunning = document.getElementById("examRunning");
-const examFinished = document.getElementById("examFinished");
-const examStartBtn = document.getElementById("examStartBtn");
-const examHistoryEl = document.getElementById("examHistory");
-const examProgressText = document.getElementById("examProgressText");
-const examTimerEl = document.getElementById("examTimer");
-const examJumpGrid = document.getElementById("examJumpGrid");
-const examTag = document.getElementById("examTag");
-const examQText = document.getElementById("examQText");
-const examOptionsEl = document.getElementById("examOptions");
-const examPrevBtn = document.getElementById("examPrevBtn");
-const examNextBtn = document.getElementById("examNextBtn");
-const examSubmitBtn = document.getElementById("examSubmitBtn");
-const examExitBtn = document.getElementById("examExitBtn");
-const reviewBanner = document.getElementById("reviewBanner");
-const analysisContent = document.getElementById("analysisContent");
 
 function saveProgress() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(progress));
 }
+
+// Progress is stored per card id as {seen, correct, wrong, lastResult}, kept
+// forever so the analysis panel reflects your whole history, not just today.
+// Older saves used a plain "know"/"learning" string — migrate those on read.
+function statsFor(id) {
+  const p = progress[id];
+  if (!p) return { seen: 0, correct: 0, wrong: 0, lastResult: null };
+  if (typeof p === "string") {
+    return p === "know"
+      ? { seen: 1, correct: 1, wrong: 0, lastResult: "correct" }
+      : { seen: 1, correct: 0, wrong: 1, lastResult: "wrong" };
+  }
+  return p;
+}
+
+function recordAnswer(id, isCorrect) {
+  const s = statsFor(id);
+  s.seen += 1;
+  if (isCorrect) s.correct += 1; else s.wrong += 1;
+  s.lastResult = isCorrect ? "correct" : "wrong";
+  progress[id] = s;
+  saveProgress();
+}
+
+const chapterSelect = document.getElementById("chapterSelect");
+const counter = document.getElementById("counter");
+const progressBar = document.getElementById("progressBar");
+const quizArea = document.getElementById("quizArea");
+const emptyState = document.getElementById("emptyState");
+const quizTag = document.getElementById("quizTag");
+const quizQText = document.getElementById("quizQText");
+const quizOptionsEl = document.getElementById("quizOptions");
+const quizExplanation = document.getElementById("quizExplanation");
+const nextBtn = document.getElementById("nextBtn");
+const analysisContent = document.getElementById("analysisContent");
+
+let pool = [];            // cards matching the current chapter filter
+let currentCard = null;
+let currentOptions = null;
+let answered = false;
+let sessionCorrect = 0;
+let sessionWrong = 0;
 
 function renderMnemonicsList() {
   const el = document.getElementById("mnemonicsList");
@@ -1163,256 +874,67 @@ function buildChapterOptions() {
   chapterSelect.innerHTML = chapters.map(ch => `<option value="${ch}">${ch}</option>`).join("");
 }
 
-function buildDeck() {
+function buildPool() {
   const chosen = chapterSelect.value;
-  deck = chosen === "All chapters" ? [...CARDS] : CARDS.filter(c => c.ch === chosen);
-  sessionScopeDeck = [...deck];
-  missedIds = new Set();
-  currentPassMissed = new Set();
-  inReviewPass = false;
-  idx = 0;
-  flipped = false;
-  mcOptionsCache = {};
+  pool = chosen === "All chapters" ? [...CARDS] : CARDS.filter(c => c.ch === chosen);
+  sessionCorrect = 0;
+  sessionWrong = 0;
+  currentCard = null;
   renderAnalysisPanel();
-  render();
+  drawNextCard();
 }
 
-function shuffle() {
-  for (let i = deck.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [deck[i], deck[j]] = [deck[j], deck[i]];
+// Weighted pick: cards you've never seen in this app, or got wrong most
+// recently, come up far more often; cards you keep nailing fade into the
+// background (but never disappear entirely, so nothing goes stale).
+function pickCard() {
+  if (pool.length === 0) return null;
+  const candidates = pool.length > 1 && currentCard
+    ? pool.filter(c => c.id !== currentCard.id)
+    : pool;
+  const weighted = candidates.map(c => {
+    const s = statsFor(c.id);
+    let w;
+    if (s.seen === 0) w = 6;
+    else if (s.lastResult === "wrong") w = 4 + Math.min(s.wrong, 4);
+    else w = Math.max(0.4, 1.6 - s.correct * 0.25);
+    return { c, w };
+  });
+  const total = weighted.reduce((sum, x) => sum + x.w, 0);
+  let r = Math.random() * total;
+  for (const x of weighted) {
+    r -= x.w;
+    if (r <= 0) return x.c;
   }
-  idx = 0;
-  flipped = false;
-  mcOptionsCache = {};
-  render();
+  return weighted[weighted.length - 1].c;
 }
 
-function renderAnalysisPanel() {
-  if (sessionScopeDeck.length === 0) {
-    analysisContent.innerHTML = `<p class="analysis-empty">Study a chapter (or All chapters) in Flashcard or Multiple Choice mode — your weak-areas breakdown shows up here once you finish a round.</p>`;
+function drawNextCard() {
+  if (pool.length === 0) {
+    quizArea.style.display = "none";
+    emptyState.style.display = "block";
+    updateChrome();
     return;
   }
-  const chapters = [...new Set(sessionScopeDeck.map(c => c.ch))];
-  const rows = chapters.map(ch => {
-    const chCards = sessionScopeDeck.filter(c => c.ch === ch);
-    const total = chCards.length;
-    const missedInCh = chCards.filter(c => missedIds.has(c.id)).length;
-    const correct = total - missedInCh;
-    const pct = total > 0 ? Math.round((correct / total) * 100) : 100;
-    return { ch, correct, total, pct };
-  }).sort((a, b) => a.pct - b.pct);
-
-  const totalCards = sessionScopeDeck.length;
-  const totalMissed = sessionScopeDeck.filter(c => missedIds.has(c.id)).length;
-  const overallCorrect = totalCards - totalMissed;
-  const overallPct = totalCards > 0 ? Math.round((overallCorrect / totalCards) * 100) : 100;
-
-  const rowsHtml = rows.map(r => {
-    let verdict, cls;
-    if (r.pct >= 90) { verdict = "🟢 Solid"; cls = "verdict-good"; }
-    else if (r.pct >= 70) { verdict = "🟡 Getting there"; cls = "verdict-mid"; }
-    else { verdict = "🔴 Needs work"; cls = "verdict-bad"; }
-    return `<div class="analysis-row">
-      <div class="analysis-row-top"><span>${r.ch}</span><span>${r.correct}/${r.total} (${r.pct}%)</span></div>
-      <div class="analysis-bar-wrap"><div class="analysis-bar ${cls}" style="width:${r.pct}%"></div></div>
-      <div class="analysis-verdict ${cls}">${verdict}</div>
-    </div>`;
-  }).join("");
-
-  analysisContent.innerHTML = `
-    <p class="analysis-summary">${overallCorrect}/${totalCards} correct on first try this session (${overallPct}%).</p>
-    ${rowsHtml}
-  `;
+  emptyState.style.display = "none";
+  quizArea.style.display = "block";
+  currentCard = pickCard();
+  currentOptions = buildOptionsFor(currentCard);
+  answered = false;
+  renderQuestion();
+  updateChrome();
 }
 
-function setMode(newMode) {
-  mode = newMode;
-  modeFlashBtn.classList.toggle("active", mode === "flash");
-  modeMcBtn.classList.toggle("active", mode === "mc");
-  modeExamBtn.classList.toggle("active", mode === "exam");
-
-  const hints = {
-    flash: "New here? Start in Flashcard mode to see each fact, then switch to Multiple Choice to test whether it stuck — that's closer to the real exam format anyway.",
-    mc: "Pick the answer you think is correct — some questions are 4-option multiple choice, others are True/False. You'll see the full explanation immediately either way, so wrong guesses still teach you the fact.",
-    exam: "No feedback until the end — this mode mirrors the real 24-question, 45-minute test as closely as possible.",
-  };
-  modeHint.textContent = hints[mode];
-
-  studyChrome.style.display = mode === "exam" ? "none" : "block";
-  studyControls.style.display = mode === "exam" ? "none" : "flex";
-  examArea.style.display = mode === "exam" ? "block" : "none";
-
-  if (mode === "exam") {
-    studyArea.style.display = "none";
-    mcArea.style.display = "none";
-    doneArea.style.display = "none";
-    reviewBanner.style.display = "none";
-    renderExam();
-  } else {
-    mcAnswered = false;
-    render();
-  }
-}
-
-// ---------- Timed mock exam ----------
-
-function loadExamHistory() {
-  return JSON.parse(localStorage.getItem(EXAM_HISTORY_KEY) || "[]");
-}
-
-function saveExamHistory(history) {
-  localStorage.setItem(EXAM_HISTORY_KEY, JSON.stringify(history.slice(-10)));
-}
-
-function renderExamHistory() {
-  const history = loadExamHistory();
-  if (history.length === 0) {
-    examHistoryEl.innerHTML = "";
-    return;
-  }
-  const rows = history.slice().reverse().map(h => {
-    const dt = new Date(h.date);
-    const dateStr = dt.toLocaleDateString(undefined, { month: "short", day: "numeric" }) + " " +
-      dt.toLocaleTimeString(undefined, { hour: "2-digit", minute: "2-digit" });
-    const verdict = h.passed ? "✅ Pass" : "❌ Fail";
-    return `<tr><td>${dateStr}</td><td>${h.score}/${EXAM_LENGTH}</td><td>${verdict}</td></tr>`;
-  }).join("");
-  examHistoryEl.innerHTML = `<strong>Your past attempts</strong><table><tr><th>Date</th><th>Score</th><th>Result</th></tr>${rows}</table>`;
-}
-
-function startExam() {
-  const shuffled = [...CARDS];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  examQuestions = shuffled.slice(0, EXAM_LENGTH);
-  examOptionsCache = examQuestions.map(q => buildOptionsFor(q));
-  examAnswers = new Array(EXAM_LENGTH).fill(null);
-  examIndex = 0;
-  examEndTime = Date.now() + EXAM_MINUTES * 60 * 1000;
-  examState = "running";
-  if (examTimerInterval) clearInterval(examTimerInterval);
-  examTimerInterval = setInterval(tickExamTimer, 1000);
-  renderExam();
-}
-
-function tickExamTimer() {
-  const remainingMs = examEndTime - Date.now();
-  if (remainingMs <= 0) {
-    submitExam(true);
-    return;
-  }
-  const totalSeconds = Math.floor(remainingMs / 1000);
-  const mm = String(Math.floor(totalSeconds / 60)).padStart(2, "0");
-  const ss = String(totalSeconds % 60).padStart(2, "0");
-  examTimerEl.textContent = `${mm}:${ss}`;
-  examTimerEl.classList.toggle("low", totalSeconds <= 300);
-}
-
-function renderExam() {
-  examIdle.style.display = examState === "idle" ? "block" : "none";
-  examRunning.style.display = examState === "running" ? "block" : "none";
-  examFinished.style.display = examState === "finished" ? "block" : "none";
-
-  if (examState === "idle") {
-    renderExamHistory();
-  } else if (examState === "running") {
-    renderExamQuestion();
-  } else if (examState === "finished") {
-    renderExamResults();
-  }
-}
-
-function renderExamQuestion() {
-  const q = examQuestions[examIndex];
-  examProgressText.textContent = `Question ${examIndex + 1} of ${EXAM_LENGTH}`;
-  examTag.textContent = q.ch;
-  examQText.textContent = q.type === "tf" ? `True or False: ${q.q}` : q.q;
-
-  examJumpGrid.innerHTML = "";
-  examQuestions.forEach((_, i) => {
-    const btn = document.createElement("button");
-    btn.className = "exam-dot" + (examAnswers[i] ? " answered" : "") + (i === examIndex ? " current" : "");
-    btn.textContent = i + 1;
-    btn.addEventListener("click", () => { examIndex = i; renderExamQuestion(); });
-    examJumpGrid.appendChild(btn);
-  });
-
-  examOptionsEl.innerHTML = "";
-  examOptionsCache[examIndex].forEach(opt => {
-    const btn = document.createElement("button");
-    btn.className = "mc-option" + (examAnswers[examIndex] === opt ? " selected-exam" : "");
-    if (examAnswers[examIndex] === opt) {
-      btn.style.borderColor = "var(--navy)";
-      btn.style.background = "#eef2ff";
-    }
-    btn.textContent = opt;
-    btn.addEventListener("click", () => {
-      examAnswers[examIndex] = opt;
-      renderExamQuestion();
-    });
-    examOptionsEl.appendChild(btn);
-  });
-}
-
-function submitExam(auto) {
-  if (examTimerInterval) clearInterval(examTimerInterval);
-  const unanswered = examAnswers.filter(a => a === null).length;
-  if (!auto && unanswered > 0) {
-    const proceed = confirm(`You have ${unanswered} unanswered question(s). Submit anyway?`);
-    if (!proceed) {
-      examTimerInterval = setInterval(tickExamTimer, 1000);
-      return;
-    }
-  }
-  const score = examQuestions.reduce((sum, q, i) => sum + (examAnswers[i] === q.a ? 1 : 0), 0);
-  const passed = score >= EXAM_PASS_MARK;
-  const history = loadExamHistory();
-  history.push({ date: new Date().toISOString(), score, passed, auto: !!auto });
-  saveExamHistory(history);
-  examState = "finished";
-  renderExam();
-}
-
-function renderExamResults() {
-  const score = examQuestions.reduce((sum, q, i) => sum + (examAnswers[i] === q.a ? 1 : 0), 0);
-  const passed = score >= EXAM_PASS_MARK;
-  const bannerClass = passed ? "pass-banner" : "fail-banner";
-  const bannerText = passed
-    ? `🎉 Pass — ${score}/${EXAM_LENGTH} correct (need ${EXAM_PASS_MARK})`
-    : `Not yet — ${score}/${EXAM_LENGTH} correct (need ${EXAM_PASS_MARK})`;
-
-  const reviewHtml = examQuestions.map((q, i) => {
-    const yourAnswer = examAnswers[i];
-    const correct = yourAnswer === q.a;
-    const qLabel = q.type === "tf" ? `True or False: ${q.q}` : q.q;
-    return `<div class="review-item ${correct ? "" : "wrong"}">
-      <div class="rq">${i + 1}. ${qLabel}</div>
-      <div>Your answer: <span class="${correct ? "ra-correct" : "ra-wrong"}">${yourAnswer || "(no answer)"}</span></div>
-      ${correct ? "" : `<div>Correct answer: <span class="ra-correct">${displayAnswer(q)}</span></div>`}
-      ${(!correct && q.m) ? `<p class="mnemonic">🧠 ${q.m}</p>` : ""}
-    </div>`;
-  }).join("");
-
-  examFinished.innerHTML = `
-    <div class="${bannerClass}"><h2>${bannerText}</h2><p>Pass mark on the real test is 18/24 (75%), no negative marking.</p></div>
-    <div class="nav-row"><button class="primary" id="examRestartBtn">Start Another Mock Exam</button></div>
-    <h3 style="margin:1.2rem 0 0.4rem;">Review your answers</h3>
-    ${reviewHtml}
-  `;
-  document.getElementById("examRestartBtn").addEventListener("click", () => {
-    examState = "idle";
-    renderExam();
-  });
-}
-
-function exitExamWithoutSubmitting() {
-  if (!confirm("Exit this exam without submitting? Your progress on this attempt won't be scored.")) return;
-  if (examTimerInterval) clearInterval(examTimerInterval);
-  examState = "idle";
-  renderExam();
+function updateChrome() {
+  const total = pool.length;
+  const mastered = pool.filter(c => {
+    const s = statsFor(c.id);
+    return s.lastResult === "correct";
+  }).length;
+  counter.textContent = total === 0
+    ? "No cards in this chapter"
+    : `${mastered}/${total} mastered in this chapter · ✅ ${sessionCorrect} · ❌ ${sessionWrong} this session`;
+  progressBar.style.width = total === 0 ? "0%" : `${(mastered / total) * 100}%`;
 }
 
 function displayAnswer(c) {
@@ -1433,10 +955,10 @@ function buildOptionsFor(c) {
     const samePool = CARDS.filter(o => o.ch === c.ch && o.id !== c.id);
     const otherPool = CARDS.filter(o => o.ch !== c.ch && o.id !== c.id);
     distractors = [];
-    const pool = [...samePool];
-    while (distractors.length < 3 && pool.length > 0) {
-      const i = Math.floor(Math.random() * pool.length);
-      distractors.push(pool.splice(i, 1)[0].a);
+    const p = [...samePool];
+    while (distractors.length < 3 && p.length > 0) {
+      const i = Math.floor(Math.random() * p.length);
+      distractors.push(p.splice(i, 1)[0].a);
     }
     while (distractors.length < 3 && otherPool.length > 0) {
       const i = Math.floor(Math.random() * otherPool.length);
@@ -1451,190 +973,131 @@ function buildOptionsFor(c) {
   return options;
 }
 
-function render() {
-  reviewBanner.style.display = inReviewPass ? "block" : "none";
-  if (inReviewPass) {
-    reviewBanner.textContent = `🔁 Reviewing ${deck.length} card${deck.length === 1 ? "" : "s"} you missed — get through these to finish.`;
-  }
-
-  if (deck.length === 0 || idx >= deck.length) {
-    studyArea.style.display = "none";
-    mcArea.style.display = "none";
-    doneArea.style.display = "block";
-    doneStats.textContent = `You've been through every card in this round without missing it. Check your Study Analysis for a breakdown by chapter.`;
-    return;
-  }
-  doneArea.style.display = "none";
-  const c = deck[idx];
-  counter.textContent = `Card ${idx + 1} of ${deck.length}`;
-  const knownCount = deck.filter(c => progress[c.id] === "know").length;
-  progressBar.style.width = `${(knownCount / deck.length) * 100}%`;
-
-  if (mode === "flash") {
-    studyArea.style.display = "block";
-    mcArea.style.display = "none";
-    qText.textContent = c.type === "tf" ? `True or False: ${c.q}` : c.q;
-    aText.textContent = displayAnswer(c);
-    if (c.m) {
-      mText.textContent = "🧠 " + c.m;
-      mText.style.display = "block";
-    } else {
-      mText.style.display = "none";
-    }
-    tagFront.textContent = c.ch;
-    tagBack.textContent = c.ch;
-    card.classList.toggle("flipped", flipped);
-  } else {
-    studyArea.style.display = "none";
-    mcArea.style.display = "block";
-    mcTag.textContent = c.ch;
-    mcQText.textContent = c.type === "tf" ? `True or False: ${c.q}` : c.q;
-    if (!mcOptionsCache[idx]) mcOptionsCache[idx] = buildOptionsFor(c);
-    renderMcOptions(c);
-  }
-}
-
-function renderMcOptions(c) {
-  const options = mcOptionsCache[idx];
-  mcOptionsEl.innerHTML = "";
-  mcExplanation.style.display = "none";
-  mcAnswered = false;
-  options.forEach(opt => {
+function renderQuestion() {
+  const c = currentCard;
+  quizTag.textContent = c.ch;
+  quizQText.textContent = c.type === "tf" ? `True or False: ${c.q}` : c.q;
+  quizExplanation.style.display = "none";
+  nextBtn.style.display = "none";
+  quizOptionsEl.innerHTML = "";
+  currentOptions.forEach(opt => {
     const btn = document.createElement("button");
     btn.className = "mc-option";
     btn.textContent = opt;
-    btn.addEventListener("click", () => selectMcOption(c, opt, btn));
-    mcOptionsEl.appendChild(btn);
+    btn.addEventListener("click", () => selectOption(opt, btn));
+    quizOptionsEl.appendChild(btn);
   });
 }
 
-function selectMcOption(c, chosen, btnEl) {
-  if (mcAnswered) return;
-  mcAnswered = true;
+function selectOption(chosen, btnEl) {
+  if (answered) return;
+  answered = true;
+  const c = currentCard;
   const isCorrect = chosen === c.a;
-  progress[c.id] = isCorrect ? "know" : "learning";
-  saveProgress();
-  if (isCorrect) {
-    currentPassMissed.delete(c.id);
-  } else {
-    currentPassMissed.add(c.id);
-    missedIds.add(c.id);
-  }
-  [...mcOptionsEl.children].forEach(btn => {
+  recordAnswer(c.id, isCorrect);
+  if (isCorrect) sessionCorrect++; else sessionWrong++;
+
+  [...quizOptionsEl.children].forEach(btn => {
     btn.disabled = true;
     if (btn.textContent === c.a) btn.classList.add("correct");
     else if (btn === btnEl) btn.classList.add("incorrect");
   });
-  mcExplanation.style.display = "block";
-  mcExplanation.innerHTML = `<strong>${isCorrect ? "✅ Correct" : "❌ Not quite — here's the fact"}</strong>${displayAnswer(c)}`
+
+  quizExplanation.style.display = "block";
+  quizExplanation.innerHTML = `<strong>${isCorrect ? "✅ Correct" : "❌ Not quite — here's the fact"}</strong>${displayAnswer(c)}`
     + (c.m ? `<p class="mnemonic">🧠 ${c.m}</p>` : "");
-  const knownCount = deck.filter(c => progress[c.id] === "know").length;
-  progressBar.style.width = `${(knownCount / deck.length) * 100}%`;
-}
-
-function flip() {
-  flipped = !flipped;
-  card.classList.toggle("flipped", flipped);
-}
-
-function next() {
-  idx++;
-  flipped = false;
-  if (idx >= deck.length) {
-    if (currentPassMissed.size > 0) {
-      const reviewIds = [...currentPassMissed];
-      const reviewDeck = reviewIds.map(id => CARDS.find(c => c.id === id));
-      for (let i = reviewDeck.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [reviewDeck[i], reviewDeck[j]] = [reviewDeck[j], reviewDeck[i]];
-      }
-      deck = reviewDeck;
-      currentPassMissed = new Set();
-      idx = 0;
-      inReviewPass = true;
-      mcOptionsCache = {};
-    } else {
-      inReviewPass = false;
-    }
-    renderAnalysisPanel();
-  }
-  render();
-}
-
-function prev() {
-  if (idx > 0) idx--;
-  flipped = false;
-  render();
-}
-
-function rate(status) {
-  const c = deck[idx];
-  progress[c.id] = status;
-  saveProgress();
-  if (status === "learning") {
-    currentPassMissed.add(c.id);
-    missedIds.add(c.id);
-  } else {
-    currentPassMissed.delete(c.id);
-  }
-  next();
-}
-
-card.addEventListener("click", flip);
-document.getElementById("flipBtn").addEventListener("click", flip);
-document.getElementById("nextBtn").addEventListener("click", next);
-document.getElementById("prevBtn").addEventListener("click", prev);
-document.getElementById("mcNextBtn").addEventListener("click", next);
-document.getElementById("mcPrevBtn").addEventListener("click", prev);
-document.getElementById("knowItBtn").addEventListener("click", () => rate("know"));
-document.getElementById("stillLearningBtn").addEventListener("click", () => rate("learning"));
-document.getElementById("shuffleBtn").addEventListener("click", shuffle);
-document.getElementById("restartBtn").addEventListener("click", () => {
-  deck = [...sessionScopeDeck];
-  missedIds = new Set();
-  currentPassMissed = new Set();
-  inReviewPass = false;
-  idx = 0;
-  flipped = false;
-  mcOptionsCache = {};
+  nextBtn.style.display = "inline-block";
+  updateChrome();
   renderAnalysisPanel();
-  render();
-});
+}
+
+// ---------- Study analysis: persistent, all-time, across every chapter ----------
+
+function renderAnalysisPanel() {
+  const chapters = [...new Set(CARDS.map(c => c.ch))];
+  const rows = chapters.map(ch => {
+    const chCards = CARDS.filter(c => c.ch === ch);
+    const stats = chCards.map(c => statsFor(c.id));
+    const attempted = stats.filter(s => s.seen > 0);
+    const correctAttempts = attempted.reduce((sum, s) => sum + s.correct, 0);
+    const totalAttempts = attempted.reduce((sum, s) => sum + s.seen, 0);
+    const pct = totalAttempts > 0 ? Math.round((correctAttempts / totalAttempts) * 100) : 0;
+    return { ch, pct, attempted: attempted.length, total: chCards.length, totalAttempts };
+  }).filter(r => r.totalAttempts > 0)
+    .sort((a, b) => a.pct - b.pct);
+
+  const allStats = CARDS.map(c => statsFor(c.id));
+  const seenCount = allStats.filter(s => s.seen > 0).length;
+  const totalCorrect = allStats.reduce((sum, s) => sum + s.correct, 0);
+  const totalAnswers = allStats.reduce((sum, s) => sum + s.seen, 0);
+  const overallPct = totalAnswers > 0 ? Math.round((totalCorrect / totalAnswers) * 100) : 0;
+
+  if (totalAnswers === 0) {
+    analysisContent.innerHTML = `<p class="analysis-empty">Answer a few questions and your weak-areas breakdown will show up here.</p>`;
+    return;
+  }
+
+  const rowsHtml = rows.map(r => {
+    let verdict, cls;
+    if (r.pct >= 90) { verdict = "🟢 Solid"; cls = "verdict-good"; }
+    else if (r.pct >= 70) { verdict = "🟡 Getting there"; cls = "verdict-mid"; }
+    else { verdict = "🔴 Needs work"; cls = "verdict-bad"; }
+    return `<div class="analysis-row">
+      <div class="analysis-row-top"><span>${r.ch}</span><span>${r.pct}% (${r.attempted}/${r.total} seen)</span></div>
+      <div class="analysis-bar-wrap"><div class="analysis-bar ${cls}" style="width:${r.pct}%"></div></div>
+      <div class="analysis-verdict ${cls}">${verdict}</div>
+    </div>`;
+  }).join("");
+
+  // The specific questions worth drilling before the real test — worst first.
+  const weakCards = CARDS
+    .map(c => ({ c, s: statsFor(c.id) }))
+    .filter(x => x.s.wrong > 0)
+    .sort((a, b) => (b.s.wrong - a.s.wrong) || (a.s.correct / a.s.seen - b.s.correct / b.s.seen))
+    .slice(0, 8);
+
+  const weakHtml = weakCards.length === 0 ? "" : `
+    <div class="weak-list">
+      <h4>🎯 Cards you keep missing</h4>
+      ${weakCards.map(({ c, s }) => `<div class="weak-item">
+        <div class="wq">${c.q}</div>
+        <div class="wmeta">${c.ch} · missed ${s.wrong}/${s.seen}</div>
+      </div>`).join("")}
+    </div>`;
+
+  analysisContent.innerHTML = `
+    <p class="analysis-summary">${overallPct}% correct overall (${seenCount}/${CARDS.length} cards seen at least once).</p>
+    ${rowsHtml}
+    ${weakHtml}
+  `;
+}
+
+chapterSelect.addEventListener("change", buildPool);
+nextBtn.addEventListener("click", drawNextCard);
 document.getElementById("resetProgressBtn").addEventListener("click", () => {
-  if (confirm("Reset all saved progress?")) {
+  if (confirm("Reset all saved progress? This clears every card's history, including the weak-areas breakdown.")) {
     progress = {};
     saveProgress();
-    render();
+    buildPool();
   }
 });
-chapterSelect.addEventListener("change", buildDeck);
-modeFlashBtn.addEventListener("click", () => setMode("flash"));
-modeMcBtn.addEventListener("click", () => setMode("mc"));
-modeExamBtn.addEventListener("click", () => setMode("exam"));
-examStartBtn.addEventListener("click", startExam);
-examPrevBtn.addEventListener("click", () => { if (examIndex > 0) { examIndex--; renderExamQuestion(); } });
-examNextBtn.addEventListener("click", () => { if (examIndex < EXAM_LENGTH - 1) { examIndex++; renderExamQuestion(); } });
-examSubmitBtn.addEventListener("click", () => submitExam(false));
-examExitBtn.addEventListener("click", exitExamWithoutSubmitting);
 
 document.addEventListener("keydown", (e) => {
-  if (mode === "flash") {
-    if (studyArea.style.display === "none") return;
-    if (e.code === "Space") { e.preventDefault(); flip(); }
-    else if (e.code === "ArrowRight") next();
-    else if (e.code === "ArrowLeft") prev();
-  } else if (mode === "mc") {
-    if (mcArea.style.display === "none") return;
-    if (e.code === "ArrowRight") next();
-    else if (e.code === "ArrowLeft") prev();
-  } else if (mode === "exam" && examState === "running") {
-    if (e.code === "ArrowRight" && examIndex < EXAM_LENGTH - 1) { examIndex++; renderExamQuestion(); }
-    else if (e.code === "ArrowLeft" && examIndex > 0) { examIndex--; renderExamQuestion(); }
+  if (answered) {
+    if (e.code === "ArrowRight" || e.code === "Enter" || e.code === "Space") {
+      e.preventDefault();
+      drawNextCard();
+    }
+    return;
+  }
+  if (["Digit1", "Digit2", "Digit3", "Digit4"].includes(e.code)) {
+    const btn = quizOptionsEl.children[Number(e.code.slice(-1)) - 1];
+    if (btn) btn.click();
   }
 });
 
 buildChapterOptions();
-buildDeck();
+buildPool();
 renderMnemonicsList();
 </script>
 
