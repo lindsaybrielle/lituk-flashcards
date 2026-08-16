@@ -585,7 +585,7 @@
         <li><strong>45 minutes</strong> on the clock, counting down.</li>
         <li><strong>Pass mark: 18/24 (75%)</strong> — no negative marking, so answer everything.</li>
         <li>No feedback until you submit — just like sitting the real thing.</li>
-        <li>Questions are randomly drawn fresh from the full 202-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
+        <li>Questions are randomly drawn fresh from the full 206-card bank each time, so every attempt is a different mix — the same way the real test draws from its own larger bank.</li>
       </ul>
       <button class="primary" id="examStartBtn">Start 45-Minute Mock Exam</button>
       <div class="exam-history" id="examHistory"></div>
@@ -699,6 +699,7 @@ const CARDS = [
   {ch:"Ch.2 The UK", q:"What is the capital of Wales?", a:"Cardiff.", d:["Swansea.","Edinburgh.","Belfast."]},
   {ch:"Ch.2 The UK", q:"What is the capital of Northern Ireland?", a:"Belfast.", d:["Derry.","Edinburgh.","Cardiff."]},
   {ch:"Ch.2 The UK", q:"Is the Isle of Man part of the United Kingdom?", a:"No — it's a Crown Dependency, not part of the UK.", d:["Yes — it has sent MPs to Westminster since 1866.","No — it's an overseas territory administered from London.","Yes, but only for tax and legal purposes, not political representation."]},
+  {ch:"Ch.2 The UK", q:"Which of the following is true of British Crown dependencies and overseas territories?", a:"Neither are part of the UK — Crown dependencies (the Channel Islands and Isle of Man) have their own governments, and overseas territories (like St Helena and the Falkland Islands) are also linked to but not part of the UK.", d:["They are both part of the UK.","Crown dependencies are part of the UK, but overseas territories are not.","Overseas territories are part of the UK, but Crown dependencies are not."]},
   {ch:"Ch.2 The UK", q:"What is the highest mountain in the United Kingdom, and where is it?", a:"Ben Nevis, in Scotland.", m:"\"Nevis\" — think \"heaviest\": the heaviest-hitting, highest peak in the whole UK.", d:["Snowdon (Yr Wyddfa), in Wales.","Scafell Pike, in England.","Slieve Donard, in Northern Ireland."]},
   {ch:"Ch.2 The UK", q:"What is the highest mountain in Wales?", a:"Snowdon (Yr Wyddfa).", m:"Snowdon sounds snowy — Wales' snow-capped highest peak.", d:["Ben Nevis.","Scafell Pike.","Cadair Idris."]},
   {ch:"Ch.2 The UK", q:"What is the highest mountain in England?", a:"Scafell Pike.", m:"Scafell = \"scale a fell\" — \"fell\" is the old word for mountain, and this one's England's tallest.", d:["Helvellyn.","Ben Nevis.","Snowdon (Yr Wyddfa)."]},
@@ -715,9 +716,11 @@ const CARDS = [
   {ch:"Ch.2 The UK", q:"What are the national emblems of Wales?", a:"The daffodil and the leek.", d:["The rose and the oak leaf.","The thistle and the heather.","The shamrock and the flax."]},
   {ch:"Ch.2 The UK", q:"What is the national emblem of Northern Ireland?", a:"The shamrock (also flax).", d:["The thistle (also heather).","The rose (also oak leaf).","The daffodil (also leek)."]},
   {ch:"Ch.2 The UK", q:"What does the Union Flag combine?", a:"The crosses of St George (England), St Andrew (Scotland), and St Patrick (Ireland). Wales isn't separately represented.", m:"Patron saint days in calendar order: David (1 Mar) → Patrick (17 Mar) → George (23 Apr) → Andrew (30 Nov) — spring opens the year of saints, autumn closes it.", d:["The crosses of St George, St David, and St Andrew, representing England, Wales, and Scotland.","The crosses of St George, St Andrew, St Patrick, and St David, representing all four nations equally.","The cross of St George alone, with the other nations represented by separate regional flags."]},
+  {ch:"Ch.2 The UK", q:"Which of the following is the cross of St Andrew?", a:"A diagonal white cross on a blue ground — the cross of the patron saint of Scotland.", d:["A white cross on a red ground.","A blue cross on a white ground.","A diagonal red cross on a white ground."]},
 
   // Chapter 3 — History
   {ch:"Ch.3 History", q:"Which prehistoric monument still stands in the English county of Wiltshire?", a:"Stonehenge, built during the Stone Age.", d:["Sutton Hoo.","Hadrian's Wall.","Skara Brae."]},
+  {ch:"Ch.3 History", q:"During the Iron Age, most people were:", a:"Farmers, craft workers, or warriors.", d:["Sailors, fishermen, or missionaries.","Gatherers, builders, or priests.","Traders, artists, or hunters."]},
   {ch:"Ch.3 History", q:"What is Skara Brae, and where is it?", a:"A Stone Age settlement and the best-preserved prehistoric village in northern Europe, on Orkney off the north coast of Scotland.", d:["A Roman fort on Hadrian's Wall.","An Anglo-Saxon ship burial in Suffolk.","A medieval abbey in Yorkshire."]},
   {ch:"Ch.3 History", q:"What connected Britain to the continent for much of the Stone Age?", a:"A land bridge — people came and went, following the herds of deer and horses they hunted.", d:["A continental glacier.","An overhead pass.","An underground tunnel."]},
   {ch:"Ch.3 History", q:"What is Boudicca remembered for?", a:"Leading the Iceni tribe in a rebellion against the Roman invaders of Britain; she's still remembered today, with a statue of her on Westminster Bridge in London.", m:"Boudicca = bold attacker — she fought back against Rome.", d:["Beautiful paintings of the British landscape.","Lavish burial proceedings.","Agricultural innovations."]},
@@ -842,6 +845,7 @@ const CARDS = [
   {ch:"Famous Britons", q:"Which novelist wrote Oliver Twist and A Christmas Carol, highlighting Victorian social conditions?", a:"Charles Dickens.", d:["William Shakespeare.","Jane Austen.","Thomas Hardy."]},
   {ch:"Famous Britons", q:"Which novelist wrote Pride and Prejudice?", a:"Jane Austen.", d:["Charlotte Brontë.","Charles Dickens.","Virginia Woolf."]},
   {ch:"Famous Britons", q:"Who formulated the laws of motion and universal gravitation?", a:"Sir Isaac Newton.", m:"Newton + falling apple = gravity — \"what goes up, must come down (and so did the apple).\"", d:["Charles Darwin.","Michael Faraday.","Stephen Hawking."]},
+  {ch:"Famous Britons", q:"Who was Gertrude Jekyll?", a:"A garden and landscape designer who often worked with Edwin Lutyens to design colourful gardens around the houses he designed.", d:["A character in a Robert Louis Stevenson novel.","A Victorian engineer known for railways and bridges.","A suffragette leader."]},
   {ch:"Famous Britons", q:"Where was Sir Isaac Newton born?", a:"Lincolnshire, eastern England.", d:["Cambridge.","Stratford-upon-Avon.","London."]},
   {ch:"Famous Britons", q:"Which country house of great architectural significance was built in Derbyshire after the Middle Ages?", a:"Hardwick Hall — as the countryside grew more peaceful and landowners richer, British styles of architecture began to evolve.", d:["Royal Albert Hall.","Kensington Palace.","Elgin Manor."]},
   {ch:"Famous Britons", q:"Who proposed the theory of evolution by natural selection in On the Origin of Species?", a:"Charles Darwin.", m:"Darwin + finches = evolution — \"survival of the fittest finch.\"", d:["Isaac Newton.","Alexander Fleming.","Gregor Mendel."]},
